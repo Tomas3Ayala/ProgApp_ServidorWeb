@@ -24,7 +24,7 @@ config.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-CoronaTickets_Uy/build
-CoronaTickets_Uy/nbproject
-CoronaTickets_Uy/build.xml
-CoronaTickets_Uy/manifest.mf
+ServidorWeb/build
+ServidorWeb/nbproject
+ServidorWeb/build.xml
+ServidorWeb/manifest.mf
