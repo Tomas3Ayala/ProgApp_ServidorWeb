@@ -1,3 +1,8 @@
+<%@page import="org.springframework.context.support.ClassPathXmlApplicationContext"%>
+<%@page import="org.springframework.context.ApplicationContext"%>
+<%@page import="java.io.FileNotFoundException"%>
+<%@page import="java.util.Properties"%>
+<%@page import="java.io.FileInputStream"%>
 <%@page import="Persistencia.ConexionDB"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="logica.Fabrica"%>
@@ -14,14 +19,14 @@
     </head>
 
     <body>
-        <%! String hola = "hola"; %>
+        <%! String hola = "hola"; // %>
         <%
-//            ArrayList<String> nicknames = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios();
-//            for (String nick : nicknames) {
-//                out.println("<p>" + nick + "</p>");
-//            }
-            ConexionDB.getInstance().getConnection();
-
+            
+            ArrayList<String> nicknames = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios();
+            for (String nick : nicknames) {
+                out.println("<p>" + nick + "</p>");
+            }
+            
         %>
         <p>Hello! This is the default welcome page for a Spring Web MVC project.</p>
         <p><i>To display a different welcome page for this project, modify</i>
