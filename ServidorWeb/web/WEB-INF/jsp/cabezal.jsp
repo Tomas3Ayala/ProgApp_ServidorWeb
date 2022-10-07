@@ -9,7 +9,6 @@
 
     </head>
     <body>
-
         <header>
             <div id='cabezal'>
                 <h1>CoronaTickets.uy</h1>
@@ -27,6 +26,7 @@
                 <p>Registrar usuario</p>
             </div>
         </header>
+
 
     </body>
 </html>
