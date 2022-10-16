@@ -27,7 +27,7 @@
                         <span class="text-end">
                             <a href="/ServidorWeb/inicio-sesion">Iniciar sesión</a>
                             <br>
-                            <a href="">Registrarse</a>
+                            <a href="/ServidorWeb/registrar_usuario">Registrarse</a>
                         </span>
                     <% } else {%>
                         <div class="hstack gap-3">
@@ -36,12 +36,13 @@
                                 <div class="dropdown">
                                     <img type="button" data-bs-toggle="dropdown" src="/ServidorWeb/imagen?nick=<%= ((Usuario)session.getAttribute("usuario")).getNickname() %>" class="dropdown-toggle img-fluid rounded-circle" width="45"/>
                                     <ul class="dropdown-menu pull-right">
+                                        <li><a class="dropdown-item" href="/ServidorWeb/editar_usuario">Editar perfil</a></li>
                                         <li><a class="dropdown-item" href="?cerrarsesion">Cerrar sesión</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="vr"></div>
-                            <div class="bg-light"><a href="">Registrarse</a></div>
+                            <div class="bg-light"><a href="/ServidorWeb/registrar_usuario">Registrarse</a></div>
                         </div>
                     <% } %>
                 </div>

@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
+
 <%@page import="org.springframework.context.support.ClassPathXmlApplicationContext"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
 <%@page import="java.io.FileNotFoundException"%>
@@ -16,10 +16,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Welcome to Spring Web MVC project</title>
+        <title>Corono Tickets Uy</title>
     </head>
 
     <body>
+        <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <%! String hola = "hola"; %>
         <%
             
