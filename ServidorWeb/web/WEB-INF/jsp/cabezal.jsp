@@ -36,6 +36,9 @@
                                 <div class="dropdown">
                                     <img type="button" data-bs-toggle="dropdown" src="/ServidorWeb/imagen?nick=<%= ((Usuario)session.getAttribute("usuario")).getNickname() %>" class="dropdown-toggle img-fluid rounded-circle" width="45"/>
                                     <ul class="dropdown-menu pull-right">
+                                        <% if (session.getAttribute("tipo") == "artista") { %>
+                                            <li><a class="dropdown-item" href="/ServidorWeb/alta_espectaculo">Alta espectaculo</a></li>
+                                        <% } %>
                                         <li><a class="dropdown-item" href="/ServidorWeb/editar_usuario">Editar perfil</a></li>
                                         <li><a class="dropdown-item" href="?cerrarsesion">Cerrar sesión</a></li>
                                     </ul>
