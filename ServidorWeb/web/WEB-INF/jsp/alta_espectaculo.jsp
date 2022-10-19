@@ -88,6 +88,7 @@
                 errors.put("nombre", "El nombre es un campo obligatorio");
                 error = true;
             }
+            System.out.println(nombre + "|" + plataforma);
             if (Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_si_nombre_de_espectaculo_esta_repetido_para_cierta_plataforma(nombre, plataforma)) {
                 validez.put("nombre", false);
                 errors.put("nombre", "El nombre esta repetido para la plataforma seleccionada");
@@ -98,17 +99,22 @@
                 errors.put("descripcion", "La descripción es un campo obligatorio");
                 error = true;
             }
+            Integer fduracion = 0, fminimo = 0, fmaximo = 0;
             if (duracion.isEmpty()) {
                 validez.put("duracion", false);
                 errors.put("duracion", "La duración es un campo obligatorio");
                 error = true;
             }
+            else
+                fduracion = Math.round(Float.valueOf(minimo).floatValue());
             if (minimo.isEmpty()) {
                 validez.put("minimo", false);
                 errors.put("minimo", "La mínimo es un campo obligatorio");
                 error = true;
             }
-            else if (Math.round(Float.valueOf(minimo).floatValue()) < 0) {
+            else
+                fminimo = Math.round(Float.valueOf(minimo).floatValue());
+            if (fminimo < 0) {
                 validez.put("minimo", false);
                 errors.put("minimo", "El mínimo tiene que ser un número mayor a cero");
                 error = true;
@@ -118,7 +124,9 @@
                 errors.put("maximo", "La máximo es un campo obligatorio");
                 error = true;
             }
-            else if (Math.round(Float.valueOf(maximo).floatValue()) < 0) {
+            else
+                fmaximo = Math.round(Float.valueOf(maximo).floatValue());
+            if (fmaximo < 0) {
                 validez.put("maximo", false);
                 errors.put("maximo", "El máximo tiene que ser un número mayor a cero");
                 error = true;
@@ -134,29 +142,34 @@
                 errors.put("link", "La URL debe tener un formato valido");
                 error = true;
             }
+            Integer fcosto = 0;
             if (costo.isEmpty()) {
                 validez.put("costo", false);
                 errors.put("costo", "El costo es un campo obligatorio");
                 error = true;
             }
-            else if (Math.round(Float.valueOf(costo).floatValue()) < 0) {
+            else
+                fcosto = Math.round(Float.valueOf(costo).floatValue());
+            if (!costo.isEmpty() && Math.round(Float.valueOf(costo).floatValue()) < 0) {
                 validez.put("costo", false);
                 errors.put("costo", "El costo tiene que ser un número mayor a cero");
                 error = true;
             }
+            error = true;
             if (!error) {
                 byte[] imageEspectaculo = null;
                 if (!imagen.isEmpty()) {
                     String[] parts = imagen.split(",");
                     imageEspectaculo = Base64.getDecoder().decode(parts[1]);
                 }
-                Espectaculo espectaculo = new Espectaculo(plataforma, nombre, descripcion, Integer.parseInt(duracion), Integer.parseInt(minimo), Integer.parseInt(maximo), link, Integer.parseInt(costo), new java.util.Date(), ((Usuario)session.getAttribute("usuario")).getId(), EstadoEspectaculo.INGRESADO, "ERROR");
+                Espectaculo espectaculo = new Espectaculo(plataforma, nombre, descripcion, fduracion, fminimo, fmaximo, link, fcosto, new java.util.Date(), ((Usuario)session.getAttribute("usuario")).getId(), EstadoEspectaculo.INGRESADO);
                 if (Fabrica.getInstance().getInstanceControladorPlataforma().crear_Espectaculo(espectaculo, imageEspectaculo)) {
                     int idespec = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idespectaculo(nombre, plataforma);
                     for (String categoria : grupo_categorias) {
                         int idecatego = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_id_categoria(categoria);
                         Fabrica.getInstance().getInstanceControladorPlataforma().insertar_en_categoria_espectaculo(idecatego, idespec);
                     }
+//                    response.sendRedirect("/ServidorWeb");
                 } else {
                     System.out.println("error desconocido en alta espectaculo");
                 }
@@ -269,17 +282,17 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Duración</label>
-                    <input class="form-control <%= is_valids.get("duracion") %>" name='duracion' type='number' value="<%= values.getOrDefault("duracion", "") %>" required>
+                    <input class="form-control <%= is_valids.get("duracion") %>" name='duracion' type='number' step="1" pattern="\d+" value="<%= values.getOrDefault("duracion", "") %>" required>
                     <div class="invalid-feedback"><%= errors.getOrDefault("duracion", "") %></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Espectadores mínimos</label>
-                    <input class="form-control <%= is_valids.get("minimo") %>" name='minimo' type='number' value="<%= values.getOrDefault("minimo", "") %>" required>
+                    <input class="form-control <%= is_valids.get("minimo") %>" name='minimo' type='number' step="1" pattern="\d+" value="<%= values.getOrDefault("minimo", "") %>" required>
                     <div class="invalid-feedback"><%= errors.getOrDefault("minimo", "") %></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Espectadores máximos</label>
-                    <input class="form-control <%= is_valids.get("maximo") %>" name='maximo' type='number' value="<%= values.getOrDefault("maximo", "") %>" required>
+                    <input class="form-control <%= is_valids.get("maximo") %>" name='maximo' type='number' step="1" pattern="\d+" value="<%= values.getOrDefault("maximo", "") %>" required>
                     <div class="invalid-feedback"><%= errors.getOrDefault("maximo", "") %></div>
                 </div>
                 <div class="mb-3">
@@ -289,7 +302,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Costo</label>
-                    <input class="form-control <%= is_valids.get("costo") %>" name='costo' type='number' value="<%= values.getOrDefault("costo", "") %>" required>
+                    <input class="form-control <%= is_valids.get("costo") %>" name='costo' type='number' step="1" pattern="\d+" value="<%= values.getOrDefault("costo", "") %>" required>
                     <div class="invalid-feedback"><%= errors.getOrDefault("costo", "") %></div>
                 </div>
 
