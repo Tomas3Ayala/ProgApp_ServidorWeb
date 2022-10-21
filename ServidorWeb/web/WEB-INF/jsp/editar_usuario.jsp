@@ -13,6 +13,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <head>
     <%
         boolean es_artista = session.getAttribute("tipo") == "artista";
         HashMap<String, String> values = new HashMap<String, String>();
@@ -128,6 +129,7 @@
                     session.setAttribute("tipo", "espectador");
                     session.setAttribute("usuario", (Usuario)Fabrica.getInstance().getInstanceControllerUsuario().obtener_espectador_de_nickname(nickname));
                 }
+                %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><% // me lleva al inicio
             }
         }
         else {
@@ -147,7 +149,6 @@
             is_valids.put(set.getKey(), set.getValue() ? "is-valid":"is-invalid");
         }
     %>
-    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Editar perfil</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

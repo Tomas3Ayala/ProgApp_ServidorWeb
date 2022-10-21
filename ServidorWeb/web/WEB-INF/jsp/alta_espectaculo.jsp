@@ -18,6 +18,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <head>
     <%
         ArrayList<String> grupo_categorias = new ArrayList<String>();
         HashMap<String, String> values = new HashMap<String, String>();
@@ -34,7 +35,7 @@
             validez.put("costo", true);
             validez.put("categorias", true);
             validez.put("imagen", true);
-            
+
             String plataforma = request.getParameter("plataforma");
             String nombre = request.getParameter("nombre");
             String descripcion = request.getParameter("descripcion");
@@ -88,7 +89,6 @@
                 errors.put("nombre", "El nombre es un campo obligatorio");
                 error = true;
             }
-            System.out.println(nombre + "|" + plataforma);
             if (Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_si_nombre_de_espectaculo_esta_repetido_para_cierta_plataforma(nombre, plataforma)) {
                 validez.put("nombre", false);
                 errors.put("nombre", "El nombre esta repetido para la plataforma seleccionada");
@@ -155,7 +155,7 @@
                 errors.put("costo", "El costo tiene que ser un número mayor a cero");
                 error = true;
             }
-            error = true;
+
             if (!error) {
                 byte[] imageEspectaculo = null;
                 if (!imagen.isEmpty()) {
@@ -169,7 +169,7 @@
                         int idecatego = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_id_categoria(categoria);
                         Fabrica.getInstance().getInstanceControladorPlataforma().insertar_en_categoria_espectaculo(idecatego, idespec);
                     }
-//                    response.sendRedirect("/ServidorWeb");
+                    %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                 } else {
                     System.out.println("error desconocido en alta espectaculo");
                 }
@@ -182,7 +182,6 @@
             is_valids.put(set.getKey(), set.getValue() ? "is-valid":"is-invalid");
         }
     %>
-    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Alta de espectaculo</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

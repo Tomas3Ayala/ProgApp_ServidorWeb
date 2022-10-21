@@ -37,7 +37,6 @@ public class registrar_usuario extends HttpServlet {
         ServletContext context = getServletContext();
         RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/registrar_usuario.jsp");
         dispatcher.forward(request, response);
-//        HashMap<String, Boolean> validez = new HashMap<>();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

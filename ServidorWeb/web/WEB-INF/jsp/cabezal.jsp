@@ -3,17 +3,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <%
+            if (request.getMethod() == "GET" && request.getParameter("cerrarsesion") != null && session.getAttribute("tipo") != null) {
+                session.setAttribute("tipo", null);
+                %><meta http-equiv="Refresh" content="0; url='#'" /><%
+            }
+        %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     </head>
     <body>
-        <%
-            if (request.getMethod() == "GET" && request.getParameter("cerrarsesion") != null) {
-                session.setAttribute("tipo", null);
-            }
-        %>
 
         <header>
             <nav class="navbar bg-light">
@@ -44,8 +45,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="vr"></div>
-                            <div class="bg-light"><a href="/ServidorWeb/registrar_usuario">Registrarse</a></div>
                         </div>
                     <% } %>
                 </div>

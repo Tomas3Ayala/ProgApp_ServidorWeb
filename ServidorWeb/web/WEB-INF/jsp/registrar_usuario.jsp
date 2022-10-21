@@ -19,6 +19,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <head>
     <%
         boolean es_artista = false;
         HashMap<String, String> values = new HashMap<String, String>();
@@ -162,6 +163,7 @@
                     Espectador espectador = new Espectador(nickname, nombre, apellido, correo, f, -1, pass);
                     Fabrica.getInstance().getInstanceControllerUsuario().registrar_espectador(espectador, imageUsuario);
                 }
+                %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><% // me lleva al inicio
             }
         }
 
@@ -171,7 +173,6 @@
             is_valids.put(set.getKey(), set.getValue() ? "is-valid":"is-invalid");
         }
     %>
-    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Registrarse</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

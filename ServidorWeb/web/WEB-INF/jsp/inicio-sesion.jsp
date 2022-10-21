@@ -5,10 +5,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Inicio sesion</title>
-    </head>
-    <body>
         <%
             String auto_fill_nickname = "";
             String nick_error = "Este campo es obligatorio";
@@ -34,6 +30,7 @@
                         if (espectador.getContrasenia().equals(pass)) {
                             session.setAttribute("tipo", "espectador");
                             session.setAttribute("usuario", (Usuario)espectador);
+                            %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                         }
                         else {
                             auto_fill_nickname = request.getParameter("nickname");
@@ -44,6 +41,7 @@
                         if (artista.getContrasenia().equals(pass)) {
                             session.setAttribute("tipo", "artista");
                             session.setAttribute("usuario", (Usuario)artista);
+                            %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                         }
                         else {
                             auto_fill_nickname = request.getParameter("nickname");
@@ -52,7 +50,13 @@
                     }
                 }
             }
+            else if (session.getAttribute("tipo") != null)
+                %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
         %>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Inicio sesion</title>
+    </head>
+    <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
             <form class="was-validated" method='post' novalidate>
