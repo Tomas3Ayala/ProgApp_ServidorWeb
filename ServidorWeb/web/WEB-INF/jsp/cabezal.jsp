@@ -39,6 +39,7 @@
                                     <ul class="dropdown-menu pull-right">
                                         <% if (session.getAttribute("tipo") == "artista") { %>
                                             <li><a class="dropdown-item" href="/ServidorWeb/alta_espectaculo">Alta espectaculo</a></li>
+                                            <li><a class="dropdown-item" href="/ServidorWeb/alta_funcion">Alta funcion</a></li>
                                         <% } %>
                                         <li><a class="dropdown-item" href="/ServidorWeb/editar_usuario">Editar perfil</a></li>
                                         <li><a class="dropdown-item" href="?cerrarsesion">Cerrar sesión</a></li>

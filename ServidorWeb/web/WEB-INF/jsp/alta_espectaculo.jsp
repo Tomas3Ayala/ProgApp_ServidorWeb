@@ -106,7 +106,7 @@
                 error = true;
             }
             else
-                fduracion = Math.round(Float.valueOf(minimo).floatValue());
+                fduracion = Math.round(Float.valueOf(duracion).floatValue());
             if (minimo.isEmpty()) {
                 validez.put("minimo", false);
                 errors.put("minimo", "La mínimo es un campo obligatorio");
@@ -155,7 +155,11 @@
                 errors.put("costo", "El costo tiene que ser un número mayor a cero");
                 error = true;
             }
+<<<<<<< Updated upstream
 
+=======
+            
+>>>>>>> Stashed changes
             if (!error) {
                 byte[] imageEspectaculo = null;
                 if (!imagen.isEmpty()) {
