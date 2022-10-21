@@ -118,6 +118,7 @@
                       // Fabrica.getInstance().getInstanceControladorPlataforma().insertar_en_categoria_espectaculo(idecatego, idespec);
                    // }
 //                    response.sendRedirect("/ServidorWeb");
+                      %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                 } else {
                     System.out.println("error desconocido en alta funcion");
                 }

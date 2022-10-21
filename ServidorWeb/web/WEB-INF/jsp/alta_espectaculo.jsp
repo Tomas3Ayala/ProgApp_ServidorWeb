@@ -155,11 +155,11 @@
                 errors.put("costo", "El costo tiene que ser un número mayor a cero");
                 error = true;
             }
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
 
-=======
+//=======
             
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
             if (!error) {
                 byte[] imageEspectaculo = null;
                 if (!imagen.isEmpty()) {
