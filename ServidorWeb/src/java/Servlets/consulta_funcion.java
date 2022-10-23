@@ -1,26 +1,28 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Servlets;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import logica.Fabrica;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.http.MediaType;
 
-@WebServlet(name = "imagen", urlPatterns = {"/imagen"})
-public class imagen extends HttpServlet {
-    
-    void default_image(HttpServletResponse response) throws IOException {
-        ServletContext context = getServletContext();
-        IOUtils.copy(context.getResourceAsStream("/WEB-INF/spaceship.png"), response.getOutputStream());
-    }
+/**
+ *
+ * @author Tomas
+ */
+@WebServlet(name = "consulta_funcion", urlPatterns = {"/consulta_funcion"})
+public class consulta_funcion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,37 +35,24 @@ public class imagen extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String nick = request.getParameter("nick");
-
         String func = request.getParameter("funcion");
-        int id_func = -1;
-        if (func != null)
+        if (func == null)
+            response.sendRedirect("/ServidorWeb");
+        else
         {
             try {
-                id_func = Integer.parseInt(func);
+                int id_func = Integer.parseInt(func);
+                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_funcion(id_func)) {
+                    ServletContext context = getServletContext();
+                    RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_funcion.jsp");
+                    dispatcher.forward(request, response);
+                }
+                else
+                    response.sendRedirect("/ServidorWeb");
             } catch (NumberFormatException ex) {
-                //
+                response.sendRedirect("/ServidorWeb");
             }
         }
-        
-        response.setContentType(MediaType.ALL_VALUE);
-        if (nick != null) {
-            byte[] bytes = Fabrica.getInstance().getInstanceControllerUsuario().obtener_imagen_usuario_con_nickname(nick);
-            if (bytes != null)
-                response.getOutputStream().write(bytes);
-            else
-                default_image(response);
-        }
-        else if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_funcion(id_func)) {
-            byte[] bytes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_imagen_funcion(id_func);
-            if (bytes != null)
-                response.getOutputStream().write(bytes);
-            else
-                default_image(response);
-        }
-        else
-            default_image(response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
