@@ -45,6 +45,19 @@ public class imagen extends HttpServlet {
                 //
             }
         }
+
+        String espectaculo = request.getParameter("espectaculo");
+        int id_espec = -1;
+        if (espectaculo != null)
+        {
+            try {
+                id_espec = Integer.parseInt(espectaculo);
+            } catch (NumberFormatException ex) {
+                //
+            }
+        }
+
+        String paquete = request.getParameter("paquete");
         
         response.setContentType(MediaType.ALL_VALUE);
         if (nick != null) {
@@ -56,6 +69,20 @@ public class imagen extends HttpServlet {
         }
         else if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_funcion(id_func)) {
             byte[] bytes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_imagen_funcion(id_func);
+            if (bytes != null)
+                response.getOutputStream().write(bytes);
+            else
+                default_image(response);
+        }
+        else if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec)) {
+            byte[] bytes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_imagen_espectaculo(id_espec);
+            if (bytes != null)
+                response.getOutputStream().write(bytes);
+            else
+                default_image(response);
+        }
+        else if (Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_info_paquete(paquete) != null) {
+            byte[] bytes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_imagen_paquete(paquete);
             if (bytes != null)
                 response.getOutputStream().write(bytes);
             else
