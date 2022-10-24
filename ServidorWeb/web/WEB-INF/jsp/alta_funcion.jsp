@@ -22,7 +22,7 @@
 <!DOCTYPE html>
 <html>
     <%
-        ArrayList<String> grupo_espectaculos = new ArrayList<String>();
+        ArrayList<String> grupo_artistas = new ArrayList<String>();
         HashMap<String, String> values = new HashMap<String, String>();
         HashMap<String, String> errors = new HashMap<String, String>();
         HashMap<String, Boolean> validez = new HashMap<String, Boolean>();
@@ -32,6 +32,7 @@
             validez.put("fecha", true);
             validez.put("hora_inicio", true);
             validez.put("imagen", true);
+            validez.put("artistas", true);
             
             String espectaculo = request.getParameter("espectaculo");
             String nombre = request.getParameter("nombre");
@@ -41,13 +42,14 @@
             String imagen = request.getParameter("imagen");
             SimpleDateFormat formated =new SimpleDateFormat("yyyy-MM-dd");
             Date ffecha = (Date) formated.parse(fecha);
-            //Date ffecha =  fromated.parse
-            //java.sql.Date ffechad= new java.sql.Date(ffecha.getTime());
+            String artistas = request.getParameter("artistas");
+            
     
             values.put("nombre", nombre);
             values.put("espectaculo", espectaculo);
             values.put("fecha", fecha);
             values.put("hora_inicio", horainicio);
+            values.put("artistas", artistas);
             
 
             System.out.println("====");
@@ -55,9 +57,12 @@
             System.out.println(fecha);
             System.out.println(horainicio);
             System.out.println(espectaculo);
+            //System.out.println(artistas);
             
             
-            
+            grupo_artistas = new ArrayList<String>(Arrays.asList(artistas.split(",")));
+            if (grupo_artistas.size() == 1 && grupo_artistas.get(0).isEmpty())
+                grupo_artistas.clear();
             boolean error = false;
             if (imagen.length() != 0) { // esto no es un error, ya que la imagen tiene que volver a introducirse si es que ocurre un error
                 validez.put("imagen", false);
@@ -112,11 +117,11 @@
                 
                 Funcion funcion = new Funcion (nombre, ffecha, fhora_inicio, new java.util.Date(), id_espectaculo);
                 if (Fabrica.getInstance().getInstanceControladorPlataforma().Alta_de_Funcion(funcion, imageFuncion)) {
-                    int ideFuncion = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idfuncion(nombre);
-                  // for (String espectaculo : grupo_espectaculos) {
-                  //   int idespec = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(idespec);
-                      // Fabrica.getInstance().getInstanceControladorPlataforma().insertar_en_categoria_espectaculo(idecatego, idespec);
-                   // }
+                    int idfuncion = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idfuncion(nombre);
+                    for (String artista : grupo_artistas) {
+                     int idartista = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idartista(artista);
+                       Fabrica.getInstance().getInstanceControladorPlataforma().insertar_Artista_Invitado(idartista, idfuncion);
+                    }
 //                    response.sendRedirect("/ServidorWeb");
                       %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                 } else {
@@ -156,19 +161,19 @@
                 };
             }
             
-            function agregar_categoria() {
-                if ($('#seleccion-espectaculo').val().length === 0)
+            function agregar_artista() {
+                if ($('#seleccion-artista').val().length === 0)
                     return;
                 let salir = false;
-                $('#grupo-espectaculos li').each(function(){
+                $('#grupo-artistas li').each(function(){
                     console.log($(this).text());
-                    if ($('#seleccion-espectaculo').val() === $(this).text())
+                    if ($('#seleccion-artista').val() === $(this).text())
                         salir = true;
                 });
                 if (salir)
                     return;
 
-                $('#grupo-espectaculos').append(['<li class="list-group-item">', $('#seleccion-espectaculo').val(), '</li>'].join(''));
+                $('#grupo-artistas').append(['<li class="list-group-item">', $('#seleccion-artista').val(), '</li>'].join(''));
             }
 
             $( document ).ready(function() {
@@ -190,7 +195,19 @@
                     }
 
                     let espectaculos = "";
+                    let artistas = "";
                     let primero = true;
+                    let primer = true;
+                    
+                    $('#grupo-artistas li').each(function(){
+                        if (primer)
+                            primer = false;
+                        else
+                            artistas += ",";
+                        artistas += $(this).text();
+                    });
+                    formData.set("artistas", artistas);
+                    
                     $('#grupo-espectaculos li').each(function(){
                         if (primero)
                             primero = false;
@@ -233,6 +250,25 @@
                     <label class="form-label">Hora de inicio</label>
                     <input class="form-control <%= is_valids.get("hora_inicio") %>" name='hora_inicio' type='number' step="1" pattern="\d+" value="<%= values.getOrDefault("hora_inicio", "") %>" required>
                     <div class="invalid-feedback"><%= errors.getOrDefault("hora_inicio", "") %></div>
+                </div>
+                 <div class="mb-3">
+                    <label class="form-label">Elija artistas invitados</label>
+                    <div class="hstack gap-3">
+                        <select class="form-select" id="seleccion-artista">
+                            <option value="" selected>Artista</option>
+                            <% for (Artista artista : Fabrica.getInstance().getInstanceControladorPlataforma().obtener_artistas_disponibles()) { %>
+                             <option><%= artista.getNickname()%></option>
+                            <% } %>
+                        </select>
+                        <button type="button" class="btn btn-primary" onclick="agregar_artista()">Agregar</button>
+                    </div>
+                </div>
+                 <div class="mb-3">
+                    <ul class="list-group" id="grupo-artistas">
+                        <% for (String artista : grupo_artistas) { %>
+                            <li class="list-group-item"><%= artista %></li>
+                        <% } %>
+                    </ul>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Imagén de funcion</label>
