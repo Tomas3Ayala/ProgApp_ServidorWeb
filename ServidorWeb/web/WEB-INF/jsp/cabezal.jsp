@@ -81,9 +81,9 @@
                         <div class="hstack gap-3">
                             <div class="bg-light"><%= ((Usuario)session.getAttribute("usuario")).getNickname() %></div>
                             <div class="bg-light ms-auto">
-                                <div class="dropdown">
+                                <div class="nav-item dropdown">
                                     <img type="button" data-bs-toggle="dropdown" src="/ServidorWeb/imagen?nick=<%= ((Usuario)session.getAttribute("usuario")).getNickname() %>" class="dropdown-toggle img-fluid rounded-circle" width="45"/>
-                                    <ul class="dropdown-menu pull-right">
+                                    <ul class="dropdown-menu dropdown-menu-end">
                                         <% if (session.getAttribute("tipo") == "artista") { %>
                                             <li><a class="dropdown-item" href="/ServidorWeb/alta_espectaculo">Alta espectaculo</a></li>
                                             <li><a class="dropdown-item" href="/ServidorWeb/alta_funcion">Alta funcion</a></li>
