@@ -48,7 +48,9 @@ public class consulta_paquete extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
                 else
-                    response.sendRedirect("/ServidorWeb");
+                    
+                    System.out.println("hola"+paq);
+                   // response.sendRedirect("/ServidorWeb");
             } catch (NumberFormatException ex) {
                 response.sendRedirect("/ServidorWeb");
             }
