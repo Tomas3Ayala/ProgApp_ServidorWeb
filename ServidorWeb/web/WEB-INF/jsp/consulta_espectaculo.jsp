@@ -86,12 +86,14 @@
                         <h3>Paquetes</h3>
                         <ul class="list-group">
                             <% for (String paquete : paquetes) { %>
-                                <li class="list-group-item">
-                                    <div class="hstack gap-3">
-                                        <img src="/ServidorWeb/imagen?paquete=<%= paquete %>" class="figure-img img-fluid rounded" width="30">
-                                        <span><%= paquete %></span>
-                                    </div>
-                                </li>
+                                <a href="/ServidorWeb/consulta_paquete?paquete=<%= Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_info_paquete(paquete).getId() %>">
+                                    <li class="list-group-item">
+                                        <div class="hstack gap-3">
+                                            <img src="/ServidorWeb/imagen?paquete=<%= paquete %>" class="figure-img img-fluid rounded" width="30">
+                                            <span><%= paquete %></span>
+                                        </div>
+                                    </li>
+                                </a>
                             <% } %>
                         </ul>
                     <% } %>
