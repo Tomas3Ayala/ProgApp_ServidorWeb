@@ -14,50 +14,36 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import logica.Fabrica;
-import logica.enums.EstadoEspectaculo;
+import logica.clases.Usuario;
 
 /**
  *
- * @author Tomas
+ * @author 59892
  */
-@WebServlet(name = "consulta_espectaculo", urlPatterns = {"/consulta_espectaculo"})
-public class consulta_espectaculo extends HttpServlet {
+@WebServlet(name = "comprar_paquete", urlPatterns = {"/comprar_paquete"})
+public class comprar_paquete extends HttpServlet {
+    
+   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String espec = request.getParameter("espectaculo");
-        if (espec == null){
-            //System.out.println("algo 1");
-            response.sendRedirect("/ServidorWeb");
-           
-        } 
-        else
-        {
-            try {
-                int id_espec = Integer.parseInt(espec);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec) && Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(id_espec).getEstado() == EstadoEspectaculo.ACEPTADO) {
-                    ServletContext context = getServletContext();
-                    RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_espectaculo.jsp");
-                    dispatcher.forward(request, response);
-                }
-                else{
-                    //System.out.println("algo 2");
-                    response.sendRedirect("/ServidorWeb");
-                }
-            } catch (NumberFormatException ex) {
-                //System.out.println("algo 3");
-                response.sendRedirect("/ServidorWeb");
-            }
+        String paquete = request.getParameter("paquete");
+        int id_paqu;
+        id_paqu = Integer.parseInt(paquete);
+        
+        int id_espec = ((Usuario) session.getAttribute("usuario")).getId();
+        //System.out.println(id_espec);
+        boolean comprado = Fabrica.getInstance().getInstanceControllerUsuario().paquete_comprado(id_espec, id_paqu);
+
+        if (!comprado) {
+            Fabrica.getInstance().getInstanceControllerUsuario().comprar_paquete(id_espec, id_paqu);
+//            response.sendRedirect("/ServidorWeb/consulta_paquete?paquete=" + id_paqu); 
+        } else {
+            ServletContext context = getServletContext();
+            RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_paquete.jsp");
+            dispatcher.forward(request, response);
         }
     }
 

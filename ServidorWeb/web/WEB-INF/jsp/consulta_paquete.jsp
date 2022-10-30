@@ -11,6 +11,7 @@
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="logica.clases.Artista"%>
+<%@page import="logica.clases.Espectador"%>
 <%@page import="logica.clases.Funcion"%>
 <%@page import="logica.Fabrica"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -20,7 +21,9 @@
         int id_paqu = Integer.parseInt(request.getParameter("paquete"));
         Paquete paquete = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_info_paquetes(id_paqu);
         ArrayList<Espectaculo> espectaculos = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculos_aceptados_de_paquete(id_paqu);
-
+        ArrayList<Paquete> paquetes = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_paquetes();
+   
+        
         String categorias_str = "";
         Set<String> categorias_a_mostrar = new HashSet<String>();
         for (Espectaculo espectaculo : espectaculos) {
@@ -76,16 +79,42 @@
                     }
                 });
             }
+             function comprar_paquete() {
+                $.ajax({
+                    url: "/ServidorWeb/comprar_paquete",
+                    type: "GET",
+                    data: {"paquete" : <%= id_paqu %> },
+                    success: function(data)
+                    {
+                        location.reload();
+                    }
+                });
+                $.ajax({
+                    url: "/ServidorWeb/comprar_paquete",
+                    type: "GET",
+                    data: {"paquete" : <%= id_paqu %> },
+                    success: function(data)
+                    {
+                        location.reload();
+                    }
+                });           
+            }
         </script>
     </head>
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <center><h1>Paquete <%= paquete.getNombre() %></h1></center>
+           <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %> 
+            <center><h1>Paquete <%= paquete.getNombre()%></h1>  <% if (Fabrica.getInstance().getInstanceControllerUsuario().paquete_comprado(((Usuario) session.getAttribute("usuario")).getId(), paquete.getId())) { %>
+                <div style="align-content:center">
+                    <h2 style="align-content:center; color: brown ">Adquirido</h2>       
+                </div>
+                <% }%></center>
+            <% }%>
             <div class="modal-body row">
                 <div class="hstack gap-3">
                     <figure class="figure">
-                        <img src="/ServidorWeb/imagen?paquete=<%= id_paqu %>" class="figure-img img-fluid rounded" width="300">
+                        <img src="/ServidorWeb/imagen?paquete=<%= paquete.getNombre() %>" class="figure-img img-fluid rounded" width="300">
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
@@ -114,6 +143,14 @@
                 </ul>
             <% } %>
             <br>
+            <br>
+            <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>
+                <% if (!Fabrica.getInstance().getInstanceControllerUsuario().paquete_comprado(((Usuario) session.getAttribute("usuario")).getId(), paquete.getId())) {%>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary" data-bs-toggle="collapse" onclick="comprar_paquete(<%= paquete.getId()%>)">Comprar paquete</button>       
+                </div>
+                <% } %>  
+            <% } %> 
             <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista")) { %>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#areaAgregarEspectaculo" aria-expanded="false" aria-controls="areaAgregarEspectaculo">
@@ -144,8 +181,9 @@
                         <% } %>
                     </div>
                 </div>
-            <% } %>
+            <% } %>   
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     </body>
 </html>
+
