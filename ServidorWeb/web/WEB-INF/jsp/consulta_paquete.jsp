@@ -85,7 +85,7 @@
             <div class="modal-body row">
                 <div class="hstack gap-3">
                     <figure class="figure">
-                        <img src="/ServidorWeb/imagen?paquete=<%= id_paqu %>" class="figure-img img-fluid rounded" width="300">
+                        <img src="/ServidorWeb/imagen?paquete=<%= paquete.getNombre() %>" class="figure-img img-fluid rounded" width="300">
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
@@ -99,20 +99,24 @@
                     </div>
                 </div>
             </div>
-            <% if (espectaculos.size() > 0) { %>
-                <h3>Espectaculos asociados</h3>
-                <ul class="list-group">
-                    <% for (Espectaculo espectaculo3 : espectaculos) { %>
-                        <li class="list-group-item">
-                            <div class="hstack gap-3">
-                                <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo3.getId()%>" class="figure-img img-fluid rounded" width="30">
-                                <span><%= espectaculo3.getNombre() %></span>
-                                <a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo3.getId() %>">Consultar espectaculo</a>
-                            </div>
-                        </li>
-                    <% } %>
-                </ul>
-            <% } %>
+            <h3>
+                <% if (espectaculos.size() > 0) { %>
+                Espectaculos asociados
+                <% } else { %>
+                El paquete no tiene espectáculos asociados
+                <% } %>
+            </h3>
+            <ul class="list-group">
+                <% for (Espectaculo espectaculo3 : espectaculos) { %>
+                    <li class="list-group-item">
+                        <div class="hstack gap-3">
+                            <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo3.getId()%>" class="figure-img img-fluid rounded" width="30">
+                            <span><%= espectaculo3.getNombre() %></span>
+                            <a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo3.getId() %>">Consultar espectaculo</a>
+                        </div>
+                    </li>
+                <% } %>
+            </ul>
             <br>
             <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista")) { %>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">

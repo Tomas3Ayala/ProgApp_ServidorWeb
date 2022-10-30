@@ -49,19 +49,25 @@
                     </div>
                 </div>
             </div>
-            <% if (artistas_invitados.size() > 0) { %>
-                <h3>Artistas invitados</h3>
-                <ul class="list-group">
-                    <% for (Artista artista : artistas_invitados) { %>
+            <h3>
+                <% if (artistas_invitados.size() > 0) { %>
+                    Artistas invitados
+                <% } else { %>
+                    La función no contiene artistas invitados
+                <% } %>
+            </h3>
+            <ul class="list-group">
+                <% for (Artista artista : artistas_invitados) { %>
+                    <a href="/ServidorWeb/consulta_usuario?usuario=<%= artista.getNickname() %>">
                         <li class="list-group-item">
                             <div class="hstack gap-3">
                                 <img src="/ServidorWeb/imagen?nick=<%= artista.getNickname() %>" class="figure-img img-fluid rounded" width="30">
                                 <span><%= artista.getNickname() %></span>
                             </div>
                         </li>
-                    <% } %>
-                </ul>
-            <% } %>
+                    </a>
+                <% } %>
+            </ul>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     </body>

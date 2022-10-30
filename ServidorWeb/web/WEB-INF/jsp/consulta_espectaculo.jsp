@@ -24,7 +24,7 @@
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Función de espectaculo</title>
+        <title>Función de espectáculo</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript"> </script>
     </head>
@@ -60,11 +60,12 @@
                                 <% } %>
                             </span><br>
                         <% } %>
+                        <span>Estado: <%= espectaculo.getEstado().toString() %></span><br>
                     </div>
                 </div>
             </div>
-            <div class="hstack gap-3">
-                <div>
+            <div class="row">
+                <div class="col">
                     <% if (funciones.size() > 0) { %>
                         <h3>Funciones</h3>
                         <ul class="list-group">
@@ -81,7 +82,7 @@
                         </ul>
                     <% } %>
                 </div>
-                <div>
+                <div class="col">
                     <% if (paquetes.size() > 0) { %>
                         <h3>Paquetes</h3>
                         <ul class="list-group">

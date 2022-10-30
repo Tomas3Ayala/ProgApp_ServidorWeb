@@ -7,25 +7,19 @@ package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
-import logica.clases.Espectaculo;
-import logica.clases.Usuario;
-import logica.enums.EstadoEspectaculo;
 
 /**
  *
  * @author Tomas
  */
-@WebServlet(name = "consulta_espectaculo", urlPatterns = {"/consulta_espectaculo"})
-public class consulta_espectaculo extends HttpServlet {
+@WebServlet(name = "cerrar_sesion", urlPatterns = {"/cerrar_sesion"})
+public class cerrar_sesion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,31 +32,9 @@ public class consulta_espectaculo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String espec = request.getParameter("espectaculo");
-        if (espec == null)
-            response.sendRedirect("/ServidorWeb");
-        else
-        {
-            try {
-                int id_espec = Integer.parseInt(espec);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec)) {
-                    HttpSession session = request.getSession(true);
-                    Espectaculo espectaculo = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(id_espec);
-                    if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO || (session.getAttribute("usuario") != null && espectaculo.getId_artista() == ((Usuario)session.getAttribute("usuario")).getId()))
-                    {
-                        ServletContext context = getServletContext();
-                        RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_espectaculo.jsp");
-                        dispatcher.forward(request, response);
-                    }
-                    else
-                        response.sendRedirect("/ServidorWeb");
-                }
-                else
-                    response.sendRedirect("/ServidorWeb");
-            } catch (NumberFormatException ex) {
-                response.sendRedirect("/ServidorWeb");
-            }
-        }
+        HttpSession session = request.getSession(true);
+        session.setAttribute("tipo", null);
+        response.sendRedirect("/ServidorWeb");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

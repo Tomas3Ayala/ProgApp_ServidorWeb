@@ -157,7 +157,6 @@
                 <ul class="list-group col">
                     <h3>Paquetes</h3>
                     <% for (Paquete paquete : paquetes) { %>
-                        <% System.out.println("hola! " + paquete.getId()); %>
                         <li class="list-group-item">
                             <div class="hstack gap-3">
                                 <img src="/ServidorWeb/imagen?paquete=<%= paquete.getId() %>" class="figure-img img-fluid rounded" width="130">

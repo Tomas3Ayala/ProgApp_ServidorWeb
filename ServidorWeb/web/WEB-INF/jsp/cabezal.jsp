@@ -5,12 +5,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%
-            if (request.getMethod() == "GET" && request.getParameter("cerrarsesion") != null && session.getAttribute("tipo") != null) {
-                session.setAttribute("tipo", null);
-                %><meta http-equiv="Refresh" content="0; url='#'" /><%
-            }
-        %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link rel="stylesheet" type="text/css" href="style.css" />
@@ -39,6 +33,25 @@
                 $("#categoria").val("<%= request.getParameter("categoria") != null ? request.getParameter("categoria"):"" %>");
                 $("#plataforma").val("<%= request.getParameter("plataforma") != null ? request.getParameter("plataforma"):"" %>");
             });
+            
+            function cerrar_sesion() {
+                $.ajax({
+                    url: "/ServidorWeb/cerrar_sesion",
+                    type: "GET",
+                    success: function(data)
+                    {
+                        location.reload();
+                    }
+                });
+                $.ajax({
+                    url: "/ServidorWeb/cerrar_sesion",
+                    type: "GET",
+                    success: function(data)
+                    {
+                        location.reload();
+                    }
+                });
+            }
         </script>
     </head>
     <body>
@@ -70,6 +83,9 @@
                                 <% } %>
                             </select>
                         </div>
+                        <div>
+                            <a class="dropdown-item" href="/ServidorWeb/todos_los_usuarios"><button class="btn btn-primary">Ver usuarios</button></a>
+                        </div>
                     </div>
                     <% if (session.getAttribute("tipo") == null) { %>
                         <span class="text-end">
@@ -84,12 +100,14 @@
                                 <div class="nav-item dropdown">
                                     <img type="button" data-bs-toggle="dropdown" src="/ServidorWeb/imagen?nick=<%= ((Usuario)session.getAttribute("usuario")).getNickname() %>" class="dropdown-toggle img-fluid rounded-circle" width="45"/>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <% if (session.getAttribute("tipo") == "artista") { %>
-                                            <li><a class="dropdown-item" href="/ServidorWeb/alta_espectaculo">Alta espectaculo</a></li>
-                                            <li><a class="dropdown-item" href="/ServidorWeb/alta_funcion">Alta funcion</a></li>
+                                        <li><a class="dropdown-item" href="/ServidorWeb/consulta_usuario?usuario=<%= ((Usuario)session.getAttribute("usuario")).getNickname() %>">Ver perfil</a></li>
+                                        <% if (session.getAttribute("tipo").equals("artista")) { %>
+                                            <li><a class="dropdown-item" href="/ServidorWeb/alta_espectaculo">Alta espectáculo</a></li>
+                                            <li><a class="dropdown-item" href="/ServidorWeb/alta_funcion">Alta función</a></li>
                                         <% } %>
+                                        <!--<li><a class="dropdown-item" href="/ServidorWeb/todos_los_usuarios">Ver todos los usuarios</a></li>-->
                                         <li><a class="dropdown-item" href="/ServidorWeb/editar_usuario">Editar perfil</a></li>
-                                        <li><a class="dropdown-item" href="?cerrarsesion">Cerrar sesión</a></li>
+                                        <li onclick="cerrar_sesion()"><a class="dropdown-item" href="#">Cerrar sesión</a></li>
                                     </ul>
                                 </div>
                             </div>

@@ -14,18 +14,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import logica.Fabrica;
-import logica.clases.Espectaculo;
-import logica.clases.Usuario;
-import logica.enums.EstadoEspectaculo;
 
 /**
  *
  * @author Tomas
  */
-@WebServlet(name = "consulta_espectaculo", urlPatterns = {"/consulta_espectaculo"})
-public class consulta_espectaculo extends HttpServlet {
+@WebServlet(name = "consulta_usuario", urlPatterns = {"/consulta_usuario"})
+public class consulta_usuario extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,30 +34,18 @@ public class consulta_espectaculo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String espec = request.getParameter("espectaculo");
-        if (espec == null)
+        String usuario = request.getParameter("usuario");
+        if (usuario == null)
             response.sendRedirect("/ServidorWeb");
         else
         {
-            try {
-                int id_espec = Integer.parseInt(espec);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec)) {
-                    HttpSession session = request.getSession(true);
-                    Espectaculo espectaculo = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(id_espec);
-                    if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO || (session.getAttribute("usuario") != null && espectaculo.getId_artista() == ((Usuario)session.getAttribute("usuario")).getId()))
-                    {
-                        ServletContext context = getServletContext();
-                        RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_espectaculo.jsp");
-                        dispatcher.forward(request, response);
-                    }
-                    else
-                        response.sendRedirect("/ServidorWeb");
-                }
-                else
-                    response.sendRedirect("/ServidorWeb");
-            } catch (NumberFormatException ex) {
-                response.sendRedirect("/ServidorWeb");
+            if (Fabrica.getInstance().getInstanceControllerUsuario().existe_nickname_de_usuario(usuario)) {
+                ServletContext context = getServletContext();
+                RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_usuario.jsp");
+                dispatcher.forward(request, response);
             }
+            else
+                response.sendRedirect("/ServidorWeb");
         }
     }
 
