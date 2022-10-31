@@ -101,11 +101,12 @@
                                     <img type="button" data-bs-toggle="dropdown" src="/ServidorWeb/imagen?nick=<%= ((Usuario)session.getAttribute("usuario")).getNickname() %>" class="dropdown-toggle img-fluid rounded-circle" width="45"/>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><a class="dropdown-item" href="/ServidorWeb/consulta_usuario?usuario=<%= ((Usuario)session.getAttribute("usuario")).getNickname() %>">Ver perfil</a></li>
-                                        <% if (session.getAttribute("tipo").equals("artista")) { %>
+
+                                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista")) { %>
+                                            <li><a class="dropdown-item" href="/ServidorWeb/crear_paquete">Alta paquete</a></li>
                                             <li><a class="dropdown-item" href="/ServidorWeb/alta_espectaculo">Alta espectáculo</a></li>
                                             <li><a class="dropdown-item" href="/ServidorWeb/alta_funcion">Alta función</a></li>
                                         <% } %>
-                                        <!--<li><a class="dropdown-item" href="/ServidorWeb/todos_los_usuarios">Ver todos los usuarios</a></li>-->
                                         <li><a class="dropdown-item" href="/ServidorWeb/editar_usuario">Editar perfil</a></li>
                                         <li onclick="cerrar_sesion()"><a class="dropdown-item" href="#">Cerrar sesión</a></li>
                                     </ul>

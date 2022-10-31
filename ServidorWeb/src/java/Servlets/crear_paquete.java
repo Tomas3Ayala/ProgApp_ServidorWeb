@@ -15,18 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
-import logica.clases.Espectaculo;
-import logica.clases.Usuario;
-import logica.enums.EstadoEspectaculo;
 
 /**
  *
- * @author Tomas
+ * @author 59892
  */
-@WebServlet(name = "consulta_espectaculo", urlPatterns = {"/consulta_espectaculo"})
-public class consulta_espectaculo extends HttpServlet {
-
+@WebServlet(name = "crear_paquete", urlPatterns = {"/crear_paquete"})
+public class crear_paquete extends HttpServlet {
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,39 +32,21 @@ public class consulta_espectaculo extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+ 
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String espec = request.getParameter("espectaculo");
-        if (espec == null){
-            //System.out.println("algo 1");
+        response.setContentType("text/html;charset=UTF-8");
+      HttpSession session = request.getSession(true);
+         if (session.getAttribute("tipo") == null || !session.getAttribute("tipo").equals("artista")) {
             response.sendRedirect("/ServidorWeb");
-           
-        } 
-        else
-        {
-            try {
-                int id_espec = Integer.parseInt(espec);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec)) {
-                    HttpSession session = request.getSession(true);
-                    Espectaculo espectaculo = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(id_espec);
-                    if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO || (session.getAttribute("usuario") != null && espectaculo.getId_artista() == ((Usuario)session.getAttribute("usuario")).getId()))
-                    {
-                        ServletContext context = getServletContext();
-                        RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_espectaculo.jsp");
-                        dispatcher.forward(request, response);
-                    }
-                    else
-                        response.sendRedirect("/ServidorWeb");
-                }
-                else{
-                    //System.out.println("algo 2");
-                    response.sendRedirect("/ServidorWeb");
-                }
-            } catch (NumberFormatException ex) {
-                //System.out.println("algo 3");
-                response.sendRedirect("/ServidorWeb");
-            }
         }
+        else {
+            ServletContext context = getServletContext();
+            RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/crear_paquete.jsp");
+            dispatcher.forward(request, response);
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
