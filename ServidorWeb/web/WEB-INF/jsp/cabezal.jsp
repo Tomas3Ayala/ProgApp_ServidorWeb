@@ -25,6 +25,7 @@
                     formData.set("pagina", <%= request.getParameter("pagina") != null ? request.getParameter("pagina"):"1" %>);
                     if (n_busqueda_pagina !== null)
                         formData.set("pagina", n_busqueda_pagina);
+                    formData.set("orden", orden_final);
     
 //                    e.preventDefault();
 //                    window.location.assign("/ServidorWeb/index.htm");

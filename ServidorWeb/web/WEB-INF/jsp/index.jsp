@@ -102,6 +102,9 @@
                         return 0;
                 }
             });
+
+            int antes_de_separar_por_pagina1 = espectaculos.size();
+            int antes_de_separar_por_pagina2 = paquetes.size();
             int elems_pagina = 12; // elementos por pagina
             int ultima_pagina = 1;
             if (espectaculos.size() > elems_pagina || paquetes.size() > elems_pagina) {
@@ -133,37 +136,112 @@
                     paquetes.remove(paquete);
                 numero_pagina++;
             }
+
+            ArrayList<Espectaculo> otro_orden_espectaculos = (ArrayList<Espectaculo>)espectaculos.clone();
+            ArrayList<Paquete> otro_orden_paquetes = (ArrayList<Paquete>)paquetes.clone();
+            otro_orden_espectaculos.sort(new Comparator<Espectaculo>() {
+                @Override
+                public int compare(Espectaculo o1, Espectaculo o2) {
+                    return o2.getNombre().toLowerCase().compareTo(o1.getNombre().toLowerCase()) > 0 ? -1:1;
+                }
+            });
+            otro_orden_paquetes.sort(new Comparator<Paquete>() {
+                @Override
+                public int compare(Paquete o1, Paquete o2) {
+                    return o2.getNombre().toLowerCase().compareTo(o1.getNombre().toLowerCase()) > 0 ? -1:1;
+                }
+            });
+            String orden_final = "1";
+            if (request.getParameter("orden") != null)
+                orden_final = request.getParameter("orden");
+//            System.out.println(orden_final);
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Corono Tickets Uy</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            var orden_final = null;
+            function cambio_orden(v) {
+                if (v === null)
+                    v = $('#orden').val();
+                if ($('#orden').val() === "1") {
+                    $('#espectaculos_anio').show();
+                    $('#espectaculos_nanio').hide();
+                    $('#paquetes_anio').show();
+                    $('#paquetes_nanio').hide();
+                }
+                else {
+                    $('#espectaculos_anio').hide();
+                    $('#espectaculos_nanio').show();
+                    $('#paquetes_anio').hide();
+                    $('#paquetes_nanio').show();
+                }
+                orden_final = $('#orden').val();
+            }
+            $(document).ready(function () {
+                cambio_orden(<%= orden_final %>);
+            })
+        </script>
     </head>
 
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
 
         <div class="container">
+            <br>
+            <div class="hstack gap-3">
+                <span>Orden: </span>
+                <select class="form-select" id="orden" onchange="cambio_orden();" required>
+                    <option value="1" <%= orden_final.equals("1") ? "selected":"" %>>Año (descendente)</option>
+                    <option value="2" <%= orden_final.equals("2") ? "selected":"" %>>Alfabeticamente</option>
+                </select>
+            </div>
             <div class="mb-3 row">
                 <ul class="list-group col">
-                    <h3>Espectáculos</h3>
-                    <% for (Espectaculo espectaculo : espectaculos) { %>
-                        <li class="list-group-item">
-                            <div class="hstack gap-3">
-                                <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="130">
-                                <span><b><%= espectaculo.getNombre() %></b><br><%= espectaculo.getDescripcion() %><br><a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">Leer más...</a></span>
-                            </div>
-                        </li>
-                    <% } %>
+                    <h3>Espectáculos <%= antes_de_separar_por_pagina1 > 0 ? "(" + antes_de_separar_por_pagina1 + ")":"" %></h3>
+                    <div id="espectaculos_anio">
+                        <% for (Espectaculo espectaculo : espectaculos) { %>
+                            <li class="list-group-item">
+                                <div class="hstack gap-3">
+                                    <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="130">
+                                    <span><b><%= espectaculo.getNombre() %></b><br><%= espectaculo.getDescripcion() %><br><a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">Leer más...</a></span>
+                                </div>
+                            </li>
+                        <% } %>
+                    </div>
+                    <div id="espectaculos_nanio" style="display : none;">
+                        <% for (Espectaculo espectaculo : otro_orden_espectaculos) { %>
+                            <li class="list-group-item">
+                                <div class="hstack gap-3">
+                                    <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="130">
+                                    <span><b><%= espectaculo.getNombre() %></b><br><%= espectaculo.getDescripcion() %><br><a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">Leer más...</a></span>
+                                </div>
+                            </li>
+                        <% } %>
+                    </div>
                 </ul>
                 <ul class="list-group col">
-                    <h3>Paquetes</h3>
-                    <% for (Paquete paquete : paquetes) { %>
-                        <li class="list-group-item">
-                            <div class="hstack gap-3">
-                                <img src="/ServidorWeb/imagen?paquete=<%= paquete.getNombre() %>" class="figure-img img-fluid rounded" width="130">
-                                <span><b><%= paquete.getNombre() %></b><br><%= paquete.getDescripcion() %><br><a href="/ServidorWeb/consulta_paquete?paquete=<%= paquete.getId() %>">Leer más...</a></span>
-                            </div>
-                        </li>
-                    <% } %>
+                    <h3>Paquetes <%= antes_de_separar_por_pagina2 > 0 ? "(" + antes_de_separar_por_pagina2 + ")":"" %></h3>
+                    <div id="paquetes_anio">
+                        <% for (Paquete paquete : paquetes) { %>
+                            <li class="list-group-item">
+                                <div class="hstack gap-3">
+                                    <img src="/ServidorWeb/imagen?paquete=<%= paquete.getNombre() %>" class="figure-img img-fluid rounded" width="130">
+                                    <span><b><%= paquete.getNombre() %></b><br><%= paquete.getDescripcion() %><br><a href="/ServidorWeb/consulta_paquete?paquete=<%= paquete.getId() %>">Leer más...</a></span>
+                                </div>
+                            </li>
+                        <% } %>
+                    </div>
+                    <div id="paquetes_nanio" style="display : none;">
+                        <% for (Paquete paquete : otro_orden_paquetes) { %>
+                            <li class="list-group-item">
+                                <div class="hstack gap-3">
+                                    <img src="/ServidorWeb/imagen?paquete=<%= paquete.getNombre() %>" class="figure-img img-fluid rounded" width="130">
+                                    <span><b><%= paquete.getNombre() %></b><br><%= paquete.getDescripcion() %><br><a href="/ServidorWeb/consulta_paquete?paquete=<%= paquete.getId() %>">Leer más...</a></span>
+                                </div>
+                            </li>
+                        <% } %>
+                    </div>
                 </ul>
             </div>
             <% if (ultima_pagina != 1) { %>
@@ -171,7 +249,7 @@
                     <% if (numero_pagina - 1 >= 1) { %>
                         <button onclick="ir_a_pagina(<%= numero_pagina - 1 %>);"><-</button>
                     <% } %>
-                    <%= pagina %>
+                    <%= numero_pagina %>
                     <% if (numero_pagina + 1 <= ultima_pagina) { %>
                         <button onclick="ir_a_pagina(<%= numero_pagina + 1 %>);">-></button>
                     <% } %>

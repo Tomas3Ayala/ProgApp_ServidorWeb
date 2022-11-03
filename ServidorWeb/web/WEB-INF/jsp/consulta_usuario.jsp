@@ -50,12 +50,69 @@
                     espectaculos.remove(espectaculo);
             }
         }
-    %>
+        String log_nickname = null;
+        if (session.getAttribute("usuario") != null)
+            log_nickname = ((Usuario)session.getAttribute("usuario")).getNickname();
+        
+        ArrayList<String> seguidores = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios_que_siguen_a(nickname);
+        ArrayList<String> seguidos = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios_a_los_que_sigue(nickname);
+        boolean coma = false;
+        String seguidores_text = "";
+        for (String seguidor : seguidores) {
+            if (coma)
+                seguidores_text += ", ";
+            else
+                coma = true;
+            seguidores_text += "<a href='/ServidorWeb/consulta_usuario?usuario=" + seguidor + "'>" + seguidor + "</a>";
+        }
+        String seguidos_text = "";
+        coma = false;
+        for (String seguido : seguidos) {
+            if (coma)
+                seguidos_text += ", ";
+            else
+                coma = true;
+            seguidos_text += "<a href='/ServidorWeb/consulta_usuario?usuario=" + seguido + "'>" + seguido + "</a>";
+        }
+%>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Usuario</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script type="text/javascript"> </script>
+        <script type="text/javascript">
+            $(document).ready(() => {
+                $('#seguir').click(() => {
+//                    console.log($('#seguir').text());
+//                    return;
+                    if ($('#seguir').text() === "No seguir") {
+                        console.log("carajo");
+                        $.ajax({
+                            url: "/ServidorWeb/seguir_a_usuario",
+                            type: "GET",
+                            data: {"seguir" : "no", "nick1" : "<%= log_nickname %>", "nick2" : "<%= nickname %>" },
+                            success: function(data)
+                            {
+                                location.reload();
+                            }
+                        });
+                        $('#seguir').text("Seguir");
+                    }
+                    else {
+                        console.log("que mierda");
+                        $.ajax({
+                            url: "/ServidorWeb/seguir_a_usuario",
+                            type: "GET",
+                            data: {"seguir" : "si", "nick1" : "<%= log_nickname %>", "nick2" : "<%= nickname %>" },
+                            success: function(data)
+                            {
+                                location.reload();
+                            }
+                        });
+                        $('#seguir').text("No seguir");
+                    }
+                });
+            });
+        </script>
     </head>
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
@@ -73,6 +130,16 @@
                         <p>Apellido: <%= usuario.getApellido() %></p>
                         <p>Correo: <%= usuario.getCorreo() %></p>
                         <p>Fecha de nacimiento: <%= usuario.getNacimiento() %></p>
+
+                        <% if (!seguidores.isEmpty()) { %>
+                            <p>Seguidores: <%= seguidores_text %></p>
+                        <% } %>
+                        <% if (!seguidos.isEmpty()) { %>
+                            <p>A los que sigue: <%= seguidos_text %></p>
+                        <% } %>
+                        <% if (session.getAttribute("tipo") != null && !log_nickname.equals(nickname)) { %>
+                            <button class="btn btn-primary" id="seguir"><%= Fabrica.getInstance().getInstanceControllerUsuario().esta_siguiendo_a(log_nickname, nickname) ? "No seguir":"Seguir" %></button>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -113,7 +180,6 @@
 
                         <ul class="list-group">
                             <% for (Registro_funcion registro : registros_a_funciones) {
-                                System.out.println(registro.getId_funcion());
                                 Funcion funcion = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_funcion_por_id(registro.getId_funcion());
                             %>
                                 <a href="/ServidorWeb/consulta_funcion?funcion=<%= registro.getId_funcion() %>">

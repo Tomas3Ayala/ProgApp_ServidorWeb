@@ -97,7 +97,7 @@
                     {
                         location.reload();
                     }
-                });           
+                });
             }
         </script>
     </head>
