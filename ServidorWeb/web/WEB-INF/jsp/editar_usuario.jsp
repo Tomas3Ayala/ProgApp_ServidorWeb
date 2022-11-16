@@ -129,7 +129,9 @@
                     session.setAttribute("tipo", "espectador");
                     session.setAttribute("usuario", (Usuario)Fabrica.getInstance().getInstanceControllerUsuario().obtener_espectador_de_nickname(nickname));
                 }
-                %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><% // me lleva al inicio
+                %>
+                <meta http-equiv="Refresh" content="0; url='/ServidorWeb'" />
+                <% // me lleva al inicio
             }
         }
         else {
