@@ -28,3 +28,4 @@ ServidorWeb/build
 ServidorWeb/nbproject
 ServidorWeb/build.xml
 ServidorWeb/manifest.mf
+/ServidorWeb/dist/
