@@ -1,3 +1,4 @@
+<%@page import="Utility.GsonToUse"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="logica.clases.Paquete"%>
 <%@page import="java.util.Arrays"%>
@@ -11,6 +12,9 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -72,7 +76,7 @@
                 error = true;
             }
             
-            if (Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_si_nombre_de_paquete_esta_repetido(nombre)) {
+            if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_si_nombre_de_paquete_esta_repetido", new Object[] {nombre} ), boolean.class))) {
                 validez.put("nombre", false);
                 errors.put("nombre", "El nombre ya esta en uso");
                 error = true;
@@ -106,7 +110,7 @@
                 }
                 
                 Paquete paquete = new Paquete (nombre, descripcion, ifecha, ffecha, pporcentaje);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().registrar_paquete(paquete, imagePaquete)){ 
+                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/registrar_paquete", new Object[] {paquete,  imagePaquete} ), Boolean.class))){ 
 //                    response.sendRedirect("/ServidorWeb");
                       %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                 } else {

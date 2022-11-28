@@ -3,7 +3,7 @@
     Created on : 24/10/2022, 11:46:04 PM
     Author     : 59892
 --%>
-
+<%@page import="Utility.GsonToUse"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Set"%>
 <%@page import="logica.clases.Paquete"%>
@@ -14,20 +14,23 @@
 <%@page import="logica.clases.Espectador"%>
 <%@page import="logica.clases.Funcion"%>
 <%@page import="logica.Fabrica"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
      <%
         int id_paqu = Integer.parseInt(request.getParameter("paquete"));
-        Paquete paquete = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_info_paquetes(id_paqu);
-        ArrayList<Espectaculo> espectaculos = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculos_aceptados_de_paquete(id_paqu);
-        ArrayList<Paquete> paquetes = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_paquetes();
+        Paquete paquete = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_info_paquetes", new Object[] {id_paqu} ), Paquete.class));
+        ArrayList<Espectaculo> espectaculos = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculos_aceptados_de_paquete", new Object[] {id_paqu} ), ArrayList.class));
+        ArrayList<Paquete> paquetes = Converter.to_Paquete_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_paquetes", new Object[] {} ), ArrayList.class));
    
         
         String categorias_str = "";
         Set<String> categorias_a_mostrar = new HashSet<String>();
         for (Espectaculo espectaculo : espectaculos) {
-            ArrayList<String> categorias = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_categorias_espectaculo(espectaculo.getId());
+            ArrayList<String> categorias = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_categorias_espectaculo", new Object[] {espectaculo.getId()} ), ArrayList.class));
             for (String categoria : categorias)
                 categorias_a_mostrar.add(categoria);
         }
@@ -42,7 +45,7 @@
         if (!categorias_str.isEmpty())
             categorias_str = "Categorias: " + categorias_str;
 
-        ArrayList<Espectaculo> espectaculos_no_en_paquete = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculos_aceptados_no_de_paquete(id_paqu);
+        ArrayList<Espectaculo> espectaculos_no_en_paquete = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculos_aceptados_no_de_paquete", new Object[] {id_paqu} ), ArrayList.class));
      %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -105,7 +108,7 @@
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
            <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %> 
-            <center><h1>Paquete <%= paquete.getNombre()%></h1>  <% if (Fabrica.getInstance().getInstanceControllerUsuario().paquete_comprado(((Usuario) session.getAttribute("usuario")).getId(), paquete.getId())) { %>
+            <center><h1>Paquete <%= paquete.getNombre()%></h1>  <% if ((GsonToUse.gson.fromJson(Sender.post("/users/paquete_comprado", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  paquete.getId()} ), boolean.class))) { %>
                 <div style="align-content:center">
                     <h2 style="align-content:center; color: brown ">Adquirido</h2>       
                 </div>
@@ -149,7 +152,7 @@
             <br>
             <br>
             <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>
-                <% if (!Fabrica.getInstance().getInstanceControllerUsuario().paquete_comprado(((Usuario) session.getAttribute("usuario")).getId(), paquete.getId())) {%>
+                <% if (!(GsonToUse.gson.fromJson(Sender.post("/users/paquete_comprado", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  paquete.getId()} ), boolean.class))) {%>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button class="btn btn-primary" data-bs-toggle="collapse" onclick="comprar_paquete(<%= paquete.getId()%>)">Comprar paquete</button>       
                 </div>
@@ -169,8 +172,8 @@
                             <label class="form-label">Filtrar por plataforma: </label>
                             <select class="form-select" name="plataforma" id="plataforma" onchange="cambio_plata($(this))" required>
                                 <option value="">Plataforma</option>
-                                <% for (String ___plat : Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_plataformas_disponibles()) { %>
-                                    <option><%= ___plat %></option>
+                                <% for (Object ___plat : (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_plataformas_disponibles", new Object[] {} ), ArrayList.class))) { %>
+                                    <option><%= (String) ___plat %></option>
                                 <% } %>
                             </select>
                         </div>

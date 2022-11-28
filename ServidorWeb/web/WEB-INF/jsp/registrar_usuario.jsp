@@ -3,7 +3,7 @@
     Created on : 13-oct-2022, 20:25:34
     Author     : Tomas
 --%>
-
+<%@page import="Utility.GsonToUse"%>
 <%@page import="logica.clases.Espectador"%>
 <%@page import="java.util.Base64"%>
 <%@page import="java.time.ZoneId"%>
@@ -16,6 +16,9 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -70,7 +73,7 @@
                     error = true;
                 }
             }
-            if (Fabrica.getInstance().getInstanceControllerUsuario().chequear_nickname_repetido(nickname)) {
+            if ((GsonToUse.gson.fromJson(Sender.post("/users/chequear_nickname_repetido", new Object[] {nickname} ), boolean.class))) {
                 validez.put("nickname", false);
                 errors.put("nickname", "Nickname ya esta siendo usado en el sistema por otro usuario");
                 error = true;
@@ -90,7 +93,7 @@
                 errors.put("apellido", "El apellido es un campo obligatorio");
                 error = true;
             }
-            if (Fabrica.getInstance().getInstanceControllerUsuario().chequear_correo_repetido(correo)) {
+            if ((GsonToUse.gson.fromJson(Sender.post("/users/chequear_correo_repetido", new Object[] {correo} ), boolean.class))) {
                 validez.put("correo", false);
                 errors.put("correo", "Este correo ya esta siendo usado por otro usuario en el sistema");
                 error = true;
@@ -157,11 +160,11 @@
                 if (es_artista) {
                     Artista artista = new Artista(descripcion, biografia, link, nickname, nombre, apellido, correo, f, -1, pass);
 
-                    Fabrica.getInstance().getInstanceControllerUsuario().registrar_artista(artista, imageUsuario);
+                    Sender.post("/users/registrar_artista", new Object[] {artista,  imageUsuario} );
                 }
                 else {
                     Espectador espectador = new Espectador(nickname, nombre, apellido, correo, f, -1, pass);
-                    Fabrica.getInstance().getInstanceControllerUsuario().registrar_espectador(espectador, imageUsuario);
+                    Sender.post("/users/registrar_espectador", new Object[] {espectador,  imageUsuario} );
                 }
                 %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><% // me lleva al inicio
             }

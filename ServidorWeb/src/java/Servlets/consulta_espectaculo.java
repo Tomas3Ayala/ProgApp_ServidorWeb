@@ -19,6 +19,10 @@ import logica.Fabrica;
 import logica.clases.Espectaculo;
 import logica.clases.Usuario;
 import logica.enums.EstadoEspectaculo;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import Utility.GsonToUse;
 
 /**
  *
@@ -48,9 +52,9 @@ public class consulta_espectaculo extends HttpServlet {
         {
             try {
                 int id_espec = Integer.parseInt(espec);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec)) {
+                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class))) {
                     HttpSession session = request.getSession(true);
-                    Espectaculo espectaculo = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(id_espec);
+                    Espectaculo espectaculo = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), Espectaculo.class));
                     if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO || (session.getAttribute("usuario") != null && espectaculo.getId_artista() == ((Usuario)session.getAttribute("usuario")).getId()))
                     {
                         ServletContext context = getServletContext();

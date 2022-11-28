@@ -1,6 +1,10 @@
+<%@page import="Utility.GsonToUse"%>
 <%@page import="logica.clases.Espectador"%>
 <%@page import="logica.clases.Artista"%>
 <%@page import="logica.Fabrica"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -9,24 +13,27 @@
             String auto_fill_nickname = "";
             String nick_error = "Este campo es obligatorio";
             String pass_error = "Este campo es obligatorio";
-            if (request.getMethod() == "POST") {
+            System.out.println("hewow? " + request.getMethod());
+            if (request.getMethod().equals("POST")) {
+                System.out.println("llego?");
                 String nickname = request.getParameter("nickname");
                 String pass = request.getParameter("pass");
                 boolean existe_usuario = false;
-                if (Fabrica.getInstance().getInstanceControllerUsuario().existe_nickname_de_usuario(nickname)) {
+                if ((GsonToUse.gson.fromJson(Sender.post("/users/existe_nickname_de_usuario", new Object[] {nickname} ), boolean.class))) {
                     existe_usuario = true;
                 }
-                else if (Fabrica.getInstance().getInstanceControllerUsuario().existe_correo_de_usuario(nickname)) {
+                else if ((GsonToUse.gson.fromJson(Sender.post("/users/existe_correo_de_usuario", new Object[] {nickname} ), boolean.class))) {
                     existe_usuario = true;
-                    nickname = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nickname_de_correo(nickname);
+                    nickname = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_nickname_de_correo", new Object[] {nickname} ), String.class));
                 }
                 else {
                     nick_error = "Nickname o correo no encontrado";
                 }
                 if (existe_usuario) {
-                    Artista artista = Fabrica.getInstance().getInstanceControllerUsuario().obtener_artista_de_nickname(nickname);
+                    Artista artista = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), Artista.class));
+                    System.out.println("llego");
                     if (artista == null) {
-                        Espectador espectador = Fabrica.getInstance().getInstanceControllerUsuario().obtener_espectador_de_nickname(nickname);
+                        Espectador espectador = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), Espectador.class));
                         if (espectador.getContrasenia().equals(pass)) {
                             session.setAttribute("tipo", "espectador");
                             session.setAttribute("usuario", (Usuario)espectador);

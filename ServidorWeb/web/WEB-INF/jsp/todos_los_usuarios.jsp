@@ -3,18 +3,21 @@
     Created on : 22-oct-2022, 17:50:09
     Author     : Tomas
 --%>
-
+<%@page import="Utility.GsonToUse"%>
 <%@page import="logica.enums.EstadoEspectaculo"%>
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="logica.clases.Artista"%>
 <%@page import="logica.clases.Funcion"%>
 <%@page import="logica.Fabrica"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <%
-        ArrayList<String> usuarios = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios();
+        ArrayList<String> usuarios = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_nicknames_de_usuarios", new Object[] {} ), ArrayList.class));
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

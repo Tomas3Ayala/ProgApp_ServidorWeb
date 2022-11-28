@@ -5,6 +5,10 @@
  */
 package Servlets;
 
+import Utility.Converter;
+import Utility.GsonToUse;
+import Utility.Sender;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -47,12 +51,12 @@ public class agregar_a_paquete extends HttpServlet {
         }
         if (session.getAttribute("tipo") == null || !session.getAttribute("tipo").equals("artista"))
             return false;
-        if (!Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_paquete(id_paqu))
+        if (!(GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_paquete", new Object[] {id_paqu} ), boolean.class)))
             return false;
-        if (!Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec))
+        if (!(GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class)))
             return false;
 
-        ArrayList<Espectaculo> espectaculos_no_en_paquete = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculos_aceptados_no_de_paquete(id_paqu);
+        ArrayList<Espectaculo> espectaculos_no_en_paquete = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculos_aceptados_no_de_paquete", new Object[] {id_paqu} ), ArrayList.class));
         boolean no_enpac = false;
         for (Espectaculo espe : espectaculos_no_en_paquete) {
             if (espe.getId() == id_espec) {

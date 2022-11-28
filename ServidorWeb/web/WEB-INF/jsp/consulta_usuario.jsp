@@ -3,7 +3,7 @@
     Created on : 22-oct-2022, 17:50:09
     Author     : Tomas
 --%>
-
+<%@page import="Utility.GsonToUse"%>
 <%@page import="logica.clases.Paquete"%>
 <%@page import="logica.clases.Registro_funcion"%>
 <%@page import="logica.clases.Espectador"%>
@@ -13,6 +13,9 @@
 <%@page import="logica.clases.Artista"%>
 <%@page import="logica.clases.Funcion"%>
 <%@page import="logica.Fabrica"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -24,21 +27,21 @@
         String nickname = request.getParameter("usuario");
         String tipo = "artista";
         Usuario usuario = null;
-        Artista artista = Fabrica.getInstance().getInstanceControllerUsuario().obtener_artista_de_nickname(nickname);
+        Artista artista = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), Artista.class));
         if (artista == null) {
-            Espectador espectador = Fabrica.getInstance().getInstanceControllerUsuario().obtener_espectador_de_nickname(nickname);
+            Espectador espectador = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), Espectador.class));
             usuario = espectador;
             tipo = "espectador";
             // cosas de espectador
-            registros_a_funciones = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_todos_los_registros_de_espectador(usuario.getId());
+            registros_a_funciones = Converter.to_Registro_funcion_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_todos_los_registros_de_espectador", new Object[] {usuario.getId()} ), ArrayList.class));
             if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador") && usuario.getId() == ((Usuario)session.getAttribute("usuario")).getId())
-                paquetes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_paquetes_comprados_por_espectador(nickname);
+                paquetes = Converter.to_Paquete_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_paquetes_comprados_por_espectador", new Object[] {nickname} ), ArrayList.class));
         }
         else
         {
             usuario = artista;
             // cosas de artista
-            espectaculos = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculos_de_artista(nickname);
+            espectaculos = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculos_de_artista", new Object[] {nickname} ), ArrayList.class));
             if (session.getAttribute("tipo") == null || !session.getAttribute("tipo").equals("artista") || usuario.getId() != ((Usuario)session.getAttribute("usuario")).getId())
             {
                 ArrayList<Espectaculo> espectaculos_rem = new ArrayList<Espectaculo>();
@@ -54,8 +57,8 @@
         if (session.getAttribute("usuario") != null)
             log_nickname = ((Usuario)session.getAttribute("usuario")).getNickname();
         
-        ArrayList<String> seguidores = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios_que_siguen_a(nickname);
-        ArrayList<String> seguidos = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios_a_los_que_sigue(nickname);
+        ArrayList<String> seguidores = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_nicknames_de_usuarios_que_siguen_a", new Object[] {nickname} ), ArrayList.class));
+        ArrayList<String> seguidos = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_nicknames_de_usuarios_a_los_que_sigue", new Object[] {nickname} ), ArrayList.class));
         boolean coma = false;
         String seguidores_text = "";
         for (String seguidor : seguidores) {
@@ -138,7 +141,7 @@
                             <p>A los que sigue: <%= seguidos_text %></p>
                         <% } %>
                         <% if (session.getAttribute("tipo") != null && !log_nickname.equals(nickname)) { %>
-                            <button class="btn btn-primary" id="seguir"><%= Fabrica.getInstance().getInstanceControllerUsuario().esta_siguiendo_a(log_nickname, nickname) ? "No seguir":"Seguir" %></button>
+                            <button class="btn btn-primary" id="seguir"><%= (GsonToUse.gson.fromJson(Sender.post("/users/esta_siguiendo_a", new Object[] {log_nickname,  nickname} ), boolean.class)) ? "No seguir":"Seguir" %></button>
                         <% } %>
                     </div>
                 </div>
@@ -180,7 +183,7 @@
 
                         <ul class="list-group">
                             <% for (Registro_funcion registro : registros_a_funciones) {
-                                Funcion funcion = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_funcion_por_id(registro.getId_funcion());
+                                Funcion funcion = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {registro.getId_funcion()} ), Funcion.class));
                             %>
                                 <a href="/ServidorWeb/consulta_funcion?funcion=<%= registro.getId_funcion() %>">
                                     <li class="list-group-item">

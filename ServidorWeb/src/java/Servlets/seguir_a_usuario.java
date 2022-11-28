@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import logica.Fabrica;
 import logica.clases.Usuario;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import Utility.GsonToUse;
 
 /**
  *
@@ -48,14 +52,14 @@ public class seguir_a_usuario extends HttpServlet {
         if (!Fabrica.getInstance().getInstanceControllerUsuario().existe_nickname_de_usuario(nick1) || !Fabrica.getInstance().getInstanceControllerUsuario().existe_nickname_de_usuario(nick2))
             return;
         if (seguir) {
-            if (Fabrica.getInstance().getInstanceControllerUsuario().esta_siguiendo_a(nick1, nick2))
+            if ((GsonToUse.gson.fromJson(Sender.post("/users/esta_siguiendo_a", new Object[] {nick1,  nick2} ), boolean.class)))
                 return;
-            Fabrica.getInstance().getInstanceControllerUsuario().seguir_a(nick1, nick2);
+            Sender.post("/users/seguir_a", new Object[] {nick1,  nick2} );
         }
         else {
-            if (!Fabrica.getInstance().getInstanceControllerUsuario().esta_siguiendo_a(nick1, nick2))
+            if (!(GsonToUse.gson.fromJson(Sender.post("/users/esta_siguiendo_a", new Object[] {nick1,  nick2} ), boolean.class)))
                 return;
-            Fabrica.getInstance().getInstanceControllerUsuario().dejar_de_seguir(nick1, nick2);
+            Sender.post("/users/dejar_de_seguir", new Object[] {nick1,  nick2} );
         }
     }
 

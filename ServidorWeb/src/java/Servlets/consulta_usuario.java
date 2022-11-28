@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import logica.Fabrica;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import Utility.GsonToUse;
 
 /**
  *
@@ -39,7 +43,7 @@ public class consulta_usuario extends HttpServlet {
             response.sendRedirect("/ServidorWeb");
         else
         {
-            if (Fabrica.getInstance().getInstanceControllerUsuario().existe_nickname_de_usuario(usuario)) {
+            if ((GsonToUse.gson.fromJson(Sender.post("/users/existe_nickname_de_usuario", new Object[] {usuario} ), boolean.class))) {
                 ServletContext context = getServletContext();
                 RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_usuario.jsp");
                 dispatcher.forward(request, response);

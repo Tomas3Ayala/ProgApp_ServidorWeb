@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import logica.Fabrica;
 import logica.clases.Usuario;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import Utility.GsonToUse;
 
 /**
  *
@@ -35,10 +39,10 @@ public class comprar_paquete extends HttpServlet {
         
         int id_espec = ((Usuario) session.getAttribute("usuario")).getId();
         //System.out.println(id_espec);
-        boolean comprado = Fabrica.getInstance().getInstanceControllerUsuario().paquete_comprado(id_espec, id_paqu);
+        boolean comprado = (GsonToUse.gson.fromJson(Sender.post("/users/paquete_comprado", new Object[] {id_espec,  id_paqu} ), boolean.class));
 
         if (!comprado) {
-            Fabrica.getInstance().getInstanceControllerUsuario().comprar_paquete(id_espec, id_paqu);
+            Sender.post("/users/comprar_paquete", new Object[] {id_espec,  id_paqu} );
 //            response.sendRedirect("/ServidorWeb/consulta_paquete?paquete=" + id_paqu); 
         } else {
             ServletContext context = getServletContext();

@@ -3,20 +3,23 @@
     Created on : 22-oct-2022, 17:50:09
     Author     : Tomas
 --%>
-
+<%@page import="Utility.GsonToUse"%>
 <%@page import="logica.enums.EstadoEspectaculo"%>
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="logica.clases.Artista"%>
 <%@page import="logica.clases.Funcion"%>
 <%@page import="logica.Fabrica"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <%
         int id_func = Integer.parseInt(request.getParameter("funcion"));
-        Funcion funcion = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_funcion_por_id(id_func);
-        ArrayList<Artista> artistas_invitados = Fabrica.getInstance().getInstanceControllerUsuario().obtener_artistas_invitados(id_func);
+        Funcion funcion = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {id_func} ), Funcion.class));
+        ArrayList<Artista> artistas_invitados = Converter.to_Artista_list(GsonToUse.gson.fromJson(Sender.post("/users/obtener_artistas_invitados", new Object[] {id_func} ), ArrayList.class));
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -40,9 +43,9 @@
                         <p>Hora a la que empieza: <%= funcion.getHora_inicio() %></p>
                         <p>Fecha en la que se registro en el sistema: <%= funcion.getFecha_registro() %></p>
                         <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo") == "espectador") {
-                            Espectaculo espectaculo = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo_de_funcion(id_func);
+                            Espectaculo espectaculo = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo_de_funcion", new Object[] {id_func} ), Espectaculo.class));
                         %>
-                            <% if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO && !Fabrica.getInstance().getInstanceControllerUsuario().esta_usuario_registrado_a_funcion(((Usuario) session.getAttribute("usuario")).getId(), id_func)) { %>
+                            <% if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO && !(GsonToUse.gson.fromJson(Sender.post("/users/esta_usuario_registrado_a_funcion", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  id_func} ), boolean.class))) { %>
                                 <a href="/ServidorWeb/registro_funcion_espectaculo?espectaculo=<%= espectaculo.getId() %>&funcion=<%= funcion.getId() %>">Registrarse a función</a>
                             <% } %>
                         <% } %>

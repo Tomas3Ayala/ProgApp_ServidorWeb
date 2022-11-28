@@ -1,3 +1,4 @@
+<%@page import="Utility.GsonToUse"%>
 <%@page import="logica.enums.EstadoEspectaculo"%>
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="logica.clases.Categoria"%>
@@ -15,6 +16,9 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -89,7 +93,7 @@
                 errors.put("nombre", "El nombre es un campo obligatorio");
                 error = true;
             }
-            if (Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_si_nombre_de_espectaculo_esta_repetido_para_cierta_plataforma(nombre, plataforma)) {
+            if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_si_nombre_de_espectaculo_esta_repetido_para_cierta_plataforma", new Object[] {nombre,  plataforma} ), boolean.class))) {
                 validez.put("nombre", false);
                 errors.put("nombre", "El nombre esta repetido para la plataforma seleccionada");
                 error = true;
@@ -167,11 +171,11 @@
                     imageEspectaculo = Base64.getDecoder().decode(parts[1]);
                 }
                 Espectaculo espectaculo = new Espectaculo(plataforma, nombre, descripcion, fduracion, fminimo, fmaximo, link, fcosto, new java.util.Date(), ((Usuario)session.getAttribute("usuario")).getId(), EstadoEspectaculo.INGRESADO);
-                if (Fabrica.getInstance().getInstanceControladorPlataforma().crear_Espectaculo(espectaculo, imageEspectaculo)) {
-                    int idespec = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idespectaculo(nombre, plataforma);
+                if ((GsonToUse.gson.fromJson(Sender.post("/plataformas/crear_Espectaculo", new Object[] {espectaculo,  imageEspectaculo} ), boolean.class))) {
+                    int idespec = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_idespectaculo", new Object[] {nombre,  plataforma} ), int.class));
                     for (String categoria : grupo_categorias) {
-                        int idecatego = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_id_categoria(categoria);
-                        Fabrica.getInstance().getInstanceControladorPlataforma().insertar_en_categoria_espectaculo(idecatego, idespec);
+                        int idecatego = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_id_categoria", new Object[] {categoria} ), int.class));
+                        Sender.post("/plataformas/insertar_en_categoria_espectaculo", new Object[] {idecatego,  idespec} );
                     }
                     %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                 } else {
@@ -267,8 +271,8 @@
                     <label class="form-label">Plataforma a través de la cual se ofrecerá el espectaculo</label>
                     <select class="form-select <%= is_valids.get("plataforma") %>" name="plataforma" id="plataforma" required>
                         <option value="">Plataforma</option>
-                        <% for (String plataforma : Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_plataformas_disponibles()) { %>
-                            <option<%= (values.getOrDefault("plataforma", "").equals(plataforma)) ? " selected":"" %>><%= plataforma %></option>
+                        <% for (Object plataforma : (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_plataformas_disponibles", new Object[] {} ), ArrayList.class))) { %>
+                            <option<%= (values.getOrDefault("plataforma", "").equals(plataforma)) ? " selected":"" %>><%= (String) plataforma %></option>
                         <% } %>
                     </select>
                     <div class="invalid-feedback"><%= errors.getOrDefault("plataforma", "") %></div>
@@ -314,8 +318,8 @@
                     <div class="hstack gap-3">
                         <select class="form-select" id="seleccion-categoria">
                             <option value="" selected>Categoria</option>
-                            <% for (Categoria categoria : Fabrica.getInstance().getInstanceControladorPlataforma().obtener_categorias()) { %>
-                                <option><%= categoria.getNombre() %></option>
+                            <% for (Object categoria : Converter.to_Categoria_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_categorias", new Object[] {} ), ArrayList.class))) { %>
+                                <option><%= ((Categoria)categoria).getNombre() %></option>
                             <% } %>
                         </select>
                         <button type="button" class="btn btn-primary" onclick="agregar_categoria()">Agregar</button>

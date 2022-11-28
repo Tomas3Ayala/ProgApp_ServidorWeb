@@ -10,6 +10,10 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="Utility.GsonToUse"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -111,7 +115,7 @@
                 if (!imagen.isEmpty()) {
                     String[] parts = imagen.split(",");
                     byte[] imageUsuario = Base64.getDecoder().decode(parts[1]);
-                    Fabrica.getInstance().getInstanceControllerUsuario().modificar_imagen_de_usuario(((Usuario) session.getAttribute("usuario")).getId(), imageUsuario);
+                    Sender.post("/users/modificar_imagen_de_usuario", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  imageUsuario} );
                 }
                 java.util.Date f = java.util.Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
@@ -119,15 +123,15 @@
                 String correo = ((Usuario) session.getAttribute("usuario")).getCorreo();
                 if (es_artista) {
                     Artista artista = new Artista(descripcion, biografia, link, nickname, nombre, apellido, correo, f, -1, pass);
-                    Fabrica.getInstance().getInstanceControllerUsuario().modificar_artista(((Usuario) session.getAttribute("usuario")).getId(), artista);
+                    Sender.post("/users/modificar_artista", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  artista} );
                     session.setAttribute("tipo", "artista");
-                    session.setAttribute("usuario", (Usuario)Fabrica.getInstance().getInstanceControllerUsuario().obtener_artista_de_nickname(nickname));
+                    session.setAttribute("usuario", (Usuario)(GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), Artista.class)));
                 }
                 else {
                     Espectador espectador = new Espectador(nickname, nombre, apellido, correo, f, -1, pass);
-                    Fabrica.getInstance().getInstanceControllerUsuario().modificar_espectador(((Usuario) session.getAttribute("usuario")).getId(), espectador);
+                    Sender.post("/users/modificar_espectador", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  espectador} );
                     session.setAttribute("tipo", "espectador");
-                    session.setAttribute("usuario", (Usuario)Fabrica.getInstance().getInstanceControllerUsuario().obtener_espectador_de_nickname(nickname));
+                    session.setAttribute("usuario", (Usuario)(GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), Espectador.class)));
                 }
                 %>
                 <meta http-equiv="Refresh" content="0; url='/ServidorWeb'" />

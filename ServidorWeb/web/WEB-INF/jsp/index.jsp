@@ -1,4 +1,7 @@
-
+<%@page import="Utility.GsonToUse"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.function.Predicate"%>
@@ -33,8 +36,8 @@
             } catch (NumberFormatException ex) {
                 numero_pagina = 1;
             }
-            ArrayList<Espectaculo> espectaculos = Fabrica.getInstance().getInstanceControladorEspectaculo().get_espectaculos_aceptados();
-            ArrayList<Paquete> paquetes = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_paquetes();
+            ArrayList<Espectaculo> espectaculos = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/get_espectaculos_aceptados", new Object[] {} ), ArrayList.class));
+            ArrayList<Paquete> paquetes = Converter.to_Paquete_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_paquetes", new Object[] {} ), ArrayList.class));
 
             ArrayList<Espectaculo> espectaculos_rem = new ArrayList<Espectaculo>();
             ArrayList<Paquete> paquetes_rem = new ArrayList<Paquete>();
@@ -52,7 +55,7 @@
             if (categoria != null && !categoria.isEmpty()) {
                 espectaculos_rem.clear();
                 for (Espectaculo espectaculo : espectaculos) {
-                    ArrayList<String> categorias = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_categorias_espectaculo(espectaculo.getId());
+                    ArrayList<String> categorias = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_categorias_espectaculo", new Object[] {espectaculo.getId()} ), ArrayList.class));
                     if (!categorias.contains(categoria))
                         espectaculos_rem.add(espectaculo);
                 }

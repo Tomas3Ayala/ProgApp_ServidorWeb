@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import logica.Fabrica;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import Utility.GsonToUse;
 
 /**
  *
@@ -42,7 +46,7 @@ public class consulta_funcion extends HttpServlet {
         {
             try {
                 int id_func = Integer.parseInt(func);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_funcion(id_func)) {
+                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_funcion", new Object[] {id_func} ), boolean.class))) {
                     ServletContext context = getServletContext();
                     RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_funcion.jsp");
                     dispatcher.forward(request, response);
