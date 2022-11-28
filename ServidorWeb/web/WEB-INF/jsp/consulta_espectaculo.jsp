@@ -31,27 +31,27 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <center><h1>Espectáculo <%= espectaculo.getNombre() %></h1></center>
+            <center><h1> <%= espectaculo.getNombre() %></h1></center>
             <div class="modal-body row">
                 <div class="hstack gap-3">
                     <figure class="figure">
-                        <img src="/ServidorWeb/imagen?espectaculo=<%= id_espec %>" class="figure-img img-fluid rounded" width="300">
+                        <img src="/ServidorWeb/imagen?espectaculo=<%= id_espec %>" class="figure-img img-fluid rounded" width="200">
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
-                        <span>Nombre: <%= espectaculo.getNombre() %></span><br>
-                        <span>Descripción: <%= espectaculo.getDescripcion() %></span><br>
-                        <span>Minutos de duración: <%= espectaculo.getDuracion() %></span><br>
-                        <span>Mínimo de espectadores: <%= espectaculo.getMin_espectador() %></span><br>
-                        <span>Máximo de espectadores: <%= espectaculo.getMax_espectador() %></span><br>
-                        <span>Url: <a href="http://<%= espectaculo.getUrl() %>"><%= espectaculo.getUrl() %></a></span><br>
-                        <span>Costo: $<%= espectaculo.getCosto() %></span><br>
-                        <span>Fecha en la que se registró el espectáculo: <%= espectaculo.getFecha_registro() %></span><br>
-                        <span>Artista organizador: <%= Fabrica.getInstance().getInstanceControllerUsuario().obtener_artista_de_id(espectaculo.getId_artista()).getNickname() %></span><br>
-                        <span>Plataforma: <%= espectaculo.getPlataforma() %></span><br>
+                       <!--  <span>  espectaculo.getNombre() %></span><br> -->
+                       <span><strong> <%= espectaculo.getDescripcion() %> </strong></span><br>
+                       <span><strong><%= espectaculo.getDuracion() %> min de duración.</strong></span><br>
+                        <span><strong>MIN espectadores: <%= espectaculo.getMin_espectador() %> </strong></span><br>
+                        <span><strong>MAX espectadores: <%= espectaculo.getMax_espectador() %> </strong></span><br>
+                        <span> <a href="http://<%= espectaculo.getUrl() %>"><%= espectaculo.getUrl() %></a></span><br>
+                        <span><strong> $<%= espectaculo.getCosto() %></strong></span><br>
+                       <!-- <span>Fecha en la que se registró el espectáculo: espectaculo.getFecha_registro() %></span><br> -->
+                       <span><strong>Organizador: <%= Fabrica.getInstance().getInstanceControllerUsuario().obtener_artista_de_id(espectaculo.getId_artista()).getNickname() %> </strong></span><br>
+                       <span><strong>Se transmitirá por: <%= espectaculo.getPlataforma() %> </strong></span><br>
                         <% if (categorias.size() > 0) { %>
                             <span>
-                                Categorias:
+                                <strong>Categorias:</strong>
                                 <% for (String categoria : categorias) {
                                     if (categoria != categorias.get(0)) { %>
                                         ,
@@ -60,7 +60,7 @@
                                 <% } %>
                             </span><br>
                         <% } %>
-                        <span>Estado: <%= espectaculo.getEstado().toString() %></span><br>
+                    <!--     <span>Estado:  espectaculo.getEstado().toString() %></span><br> -->
                     </div>
                 </div>
             </div>

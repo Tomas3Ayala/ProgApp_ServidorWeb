@@ -25,6 +25,7 @@
             String plataforma = request.getParameter("plataforma");
             String categoria = request.getParameter("categoria");
             String pagina = request.getParameter("pagina");
+            String nickname = request.getParameter("usuario");
             if (pagina == null)
                 pagina = "1";
             int numero_pagina = -1;

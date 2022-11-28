@@ -59,7 +59,7 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form class="was-validated" method='post' novalidate>
+            <form class="was-validated" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: buttonface">
                 <div class="mb-3">
                     <label class="form-label">Correo electrónico o nickname</label>
                     <input class="form-control" name='nickname' type='text' value="<%= auto_fill_nickname %>" required>

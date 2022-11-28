@@ -262,7 +262,7 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form id="form" class="needs-validation" method='post' novalidate>
+            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: beige">
                 <div class="mb-3">
                     <label class="form-label">Plataforma a través de la cual se ofrecerá el espectaculo</label>
                     <select class="form-select <%= is_valids.get("plataforma") %>" name="plataforma" id="plataforma" required>

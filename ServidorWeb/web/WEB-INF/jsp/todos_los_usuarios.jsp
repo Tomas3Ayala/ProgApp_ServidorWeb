@@ -14,7 +14,7 @@
 <!DOCTYPE html>
 <html>
     <%
-        ArrayList<String> usuarios = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios();
+        ArrayList<Usuario> usuarios = Fabrica.getInstance().getInstanceControllerUsuario().obtener_usuarios();
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -33,12 +33,18 @@
                 <% } %>
             </h3>
             <ul class="list-group">
-                <% for (String nickname : usuarios) { %>
-                    <a href="/ServidorWeb/consulta_usuario?usuario=<%= nickname %>">
+                <% for (Usuario usuario : usuarios) { 
+                
+                 %>
+                    <a href="/ServidorWeb/consulta_usuario?usuario=<%= usuario.getNickname() %>">
                         <li class="list-group-item">
                             <div class="hstack gap-3">
-                                <img src="/ServidorWeb/imagen?nick=<%= nickname %>" class="figure-img img-fluid rounded" width="130">
-                                <span><%= nickname %></span>
+                                <img src="/ServidorWeb/imagen?nick=<%= usuario.getNickname() %>" class="figure-img img-fluid rounded" width="130">
+                                <span><%= usuario.getNickname() %></span>
+                                <span><%= usuario.getNombre()%></span>
+                                <span><%= usuario.getApellido()%></span>
+                                <span><%= usuario.getCorreo()%></span> 
+                                <span><%= usuario.getNacimiento() %></span>
                             </div>
                         </li>
                     </a>

@@ -205,7 +205,7 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form id="form" class="needs-validation" method='post' novalidate>
+            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: azure">
                 <div class="mb-3">
                     <label class="form-label">Nickname</label>
                     <input class="form-control" name='nickname' type='text' value="<%= ((Usuario) session.getAttribute("usuario")).getNickname() %>" required readonly>

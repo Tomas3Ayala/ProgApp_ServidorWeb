@@ -121,15 +121,15 @@
             <div class="modal-body row">
                 <div class="hstack gap-3">
                     <figure class="figure">
-                        <img src="/ServidorWeb/imagen?nick=<%= usuario.getNickname() %>" class="figure-img img-fluid rounded" width="300">
+                        <img src="/ServidorWeb/imagen?nick=<%= usuario.getNickname() %>" class="figure-img img-fluid rounded" width="250">
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
-                        <p>Nickname: <%= usuario.getNickname() %></p>
-                        <p>Nombre: <%= usuario.getNombre() %></p>
-                        <p>Apellido: <%= usuario.getApellido() %></p>
-                        <p>Correo: <%= usuario.getCorreo() %></p>
-                        <p>Fecha de nacimiento: <%= usuario.getNacimiento() %></p>
+                        <p><strong> <%= usuario.getNickname() %></strong></p>
+                        <p><strong> <%= usuario.getNombre() %></strong></p>
+                        <p><strong> <%= usuario.getApellido() %></strong></p>
+                        <p><strong> <%= usuario.getCorreo() %></strong></p>
+                        <p><strong><%= usuario.getNacimiento() %></strong</p>
 
                         <% if (!seguidores.isEmpty()) { %>
                             <p>Seguidores: <%= seguidores_text %></p>
@@ -160,7 +160,7 @@
                                         <li class="list-group-item">
                                             <div class="hstack gap-3">
                                                 <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="30">
-                                                <span><%= espectaculo.getNombre() %><br>Estado: <%= espectaculo.getEstado() %></span>
+                                                <span><%= espectaculo.getNombre() %></span>
                                             </div>
                                         </li>
                                     </a>
