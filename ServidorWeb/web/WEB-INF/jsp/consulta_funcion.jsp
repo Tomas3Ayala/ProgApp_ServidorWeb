@@ -30,18 +30,18 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <center><h1>Funcion <%= funcion.getNombre() %></h1></center>
+            <center><h1> <%= funcion.getNombre() %></h1></center>
             <div class="modal-body row">
                 <div class="hstack gap-3">
                     <figure class="figure">
-                        <img src="/ServidorWeb/imagen?funcion=<%= id_func %>" class="figure-img img-fluid rounded" width="300">
+                        <img src="/ServidorWeb/imagen?funcion=<%= id_func %>" class="figure-img img-fluid rounded" width="200">
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
-                        <p>Nombre: <%= funcion.getNombre() %></p>
-                        <p>Fecha: <%= funcion.getFecha() %></p>
-                        <p>Hora a la que empieza: <%= funcion.getHora_inicio() %></p>
-                        <p>Fecha en la que se registro en el sistema: <%= funcion.getFecha_registro() %></p>
+                        
+                        <p> <strong>Fecha del espesctaculo: <%= funcion.getFecha() %> </strong></p>
+                        <p> <strong>Hora de inicio: <%= funcion.getHora_inicio() %> hs. </strong></p>
+                     <!--   <p>Fecha en la que se registro en el sistema:  funcion.getFecha_registro() %></p> -->
                         <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo") == "espectador") {
                             Espectaculo espectaculo = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo_de_funcion", new Object[] {id_func} ), Espectaculo.class));
                         %>

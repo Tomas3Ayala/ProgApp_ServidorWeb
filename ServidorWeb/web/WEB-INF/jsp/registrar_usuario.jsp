@@ -201,6 +201,8 @@
             }
 
             $( document ).ready(function() {
+                $(".toast").toast("show");
+                
                 <% if (!es_artista) { %>
                     $(".parte_de_artista").hide(); // oculta los datos de artista
                 <% } %>
@@ -235,11 +237,20 @@
 
             });
         </script>
+        
     </head>
     <body>
+        <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ESO Y DEJALO ASI
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form id="form" class="needs-validation" method='post' novalidate>
+            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: buttonface">
                 <div class="mb-3">
                     <label class="form-label">Nickname</label>
                     <input class="form-control <%= is_valids.get("nickname") %>" name='nickname' type='text' value="<%= values.getOrDefault("nickname", "") %>" required>
@@ -304,5 +315,6 @@
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+       
     </body>
 </html>
