@@ -2,16 +2,30 @@ package DTOs;
 
 import java.io.Serializable;
 import java.util.Date;
+import logica.clases.Funcion;
 
 public class FuncionDto implements Serializable {
+
+    public static Funcion toFuncion(FuncionDto item) {
+        if (item == null)
+            return null;
+        return new Funcion(item.getNombre(), new Date(item.getFecha()), item.getHora_inicio(), new Date(item.getFecha_registro()), item.getId(), item.getId_espectaculo());
+    }
+
+    public static FuncionDto fromFuncion(Funcion item) {
+        if (item == null)
+            return null;
+        return new FuncionDto(item);
+    }
+
     private String nombre;
-    private Date fecha;
+    private long fecha;
     private int hora_inicio;
-    private Date fecha_registro;
+    private long fecha_registro;
     private int id;
     private int id_espectaculo;
 
-    public FuncionDto(String nombre, Date fecha, int hora_inicio, Date fecha_registro, int id, int id_espectaculo) {
+    public FuncionDto(String nombre, long fecha, int hora_inicio, long fecha_registro, int id, int id_espectaculo) {
         this.nombre = nombre;
         this.fecha = fecha;
         this.hora_inicio = hora_inicio;
@@ -19,12 +33,14 @@ public class FuncionDto implements Serializable {
         this.id = id;
         this.id_espectaculo = id_espectaculo;
     }
-     public FuncionDto(String nombre, Date fecha, int hora_inicio, Date fecha_registro, int id_espectaculo) {
-        this.nombre = nombre;
-        this.fecha = fecha;
-        this.hora_inicio = hora_inicio;
-        this.fecha_registro = fecha_registro;
-        this.id_espectaculo = id_espectaculo;
+
+    public FuncionDto(Funcion item) {
+        this.nombre = item.getNombre();
+        this.fecha = item.getFecha().getTime();
+        this.hora_inicio = item.getHora_inicio();
+        this.fecha_registro = item.getFecha_registro().getTime();
+        this.id = item.getId();
+        this.id_espectaculo = item.getId_espectaculo();
     }
 
     public String getNombre() {
@@ -35,11 +51,11 @@ public class FuncionDto implements Serializable {
         this.nombre = nombre;
     }
 
-    public Date getFecha() {
+    public long getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(long fecha) {
         this.fecha = fecha;
     }
 
@@ -51,11 +67,11 @@ public class FuncionDto implements Serializable {
         this.hora_inicio = hora_inicio;
     }
 
-    public Date getFecha_registro() {
+    public long getFecha_registro() {
         return fecha_registro;
     }
 
-    public void setFecha_registro(Date fecha_registro) {
+    public void setFecha_registro(long fecha_registro) {
         this.fecha_registro = fecha_registro;
     }
 

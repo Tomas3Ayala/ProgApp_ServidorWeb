@@ -3,17 +3,17 @@
     Created on : 24/10/2022, 11:46:04 PM
     Author     : 59892
 --%>
+<%@page import="DTOs.PaqueteDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Set"%>
 <%@page import="logica.clases.Paquete"%>
-<%@page import="logica.enums.EstadoEspectaculo"%>
+<%@page import="enums.EstadoEspectaculo"%>
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="logica.clases.Artista"%>
 <%@page import="logica.clases.Espectador"%>
 <%@page import="logica.clases.Funcion"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="Utility.Converter"%>
 <%@page import="Utility.Sender"%>
 <%@page import="com.google.gson.Gson"%>
@@ -22,7 +22,7 @@
 <html>
      <%
         int id_paqu = Integer.parseInt(request.getParameter("paquete"));
-        Paquete paquete = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_info_paquetes", new Object[] {id_paqu} ), Paquete.class));
+        Paquete paquete = PaqueteDto.toPaquete(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_info_paquetes", new Object[] {id_paqu} ), PaqueteDto.class));
         ArrayList<Espectaculo> espectaculos = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculos_aceptados_de_paquete", new Object[] {id_paqu} ), ArrayList.class));
         ArrayList<Paquete> paquetes = Converter.to_Paquete_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_paquetes", new Object[] {} ), ArrayList.class));
    

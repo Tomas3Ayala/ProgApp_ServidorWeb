@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
 import Utility.Converter;
 import Utility.Sender;
 import com.google.gson.Gson;
@@ -51,9 +50,9 @@ public class consulta_paquete extends HttpServlet {
                     RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_paquete.jsp");
                     dispatcher.forward(request, response);
                 }
-                else
-                    
-                    System.out.println("hola"+paq);
+//                else
+//                    
+//                    System.out.println("hola"+paq);
                    // response.sendRedirect("/ServidorWeb");
             } catch (NumberFormatException ex) {
                 response.sendRedirect("/ServidorWeb");

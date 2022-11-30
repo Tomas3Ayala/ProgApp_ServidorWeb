@@ -1,3 +1,4 @@
+<%@page import="DTOs.PaqueteDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="logica.clases.Paquete"%>
@@ -8,7 +9,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.time.Period"%>
 <%@page import="java.time.LocalDate"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -47,11 +47,11 @@
             values.put("fecha_fin", fecha_fin);
             values.put("porcentaje", porcentaje);
            
-            System.out.println("====");
-            System.out.println(nombre);
-            System.out.println(descripcion);
-            System.out.println(fecha_inicio);
-            System.out.println(porcentaje);         
+//            System.out.println("====");
+//            System.out.println(nombre);
+//            System.out.println(descripcion);
+//            System.out.println(fecha_inicio);
+//            System.out.println(porcentaje);         
             
             boolean error = false;
             if (imagen.length() != 0) { // esto no es un error, ya que la imagen tiene que volver a introducirse si es que ocurre un error
@@ -110,7 +110,7 @@
                 }
                 
                 Paquete paquete = new Paquete (nombre, descripcion, ifecha, ffecha, pporcentaje);
-                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/registrar_paquete", new Object[] {paquete,  imagePaquete} ), Boolean.class))){ 
+                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/registrar_paquete", new Object[] {PaqueteDto.fromPaquete(paquete),  imagePaquete} ), Boolean.class))){ 
 //                    response.sendRedirect("/ServidorWeb");
                       %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                 } else {

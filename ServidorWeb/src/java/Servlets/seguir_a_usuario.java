@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
 import logica.clases.Usuario;
 import Utility.Converter;
 import Utility.Sender;
@@ -49,7 +48,7 @@ public class seguir_a_usuario extends HttpServlet {
         HttpSession session = request.getSession(true);
         if (session.getAttribute("tipo") == null || !((Usuario)session.getAttribute("usuario")).getNickname().equals(nick1))
             return;
-        if (!Fabrica.getInstance().getInstanceControllerUsuario().existe_nickname_de_usuario(nick1) || !Fabrica.getInstance().getInstanceControllerUsuario().existe_nickname_de_usuario(nick2))
+        if (!GsonToUse.gson.fromJson(Sender.post("/users/existe_nickname_de_usuario", new Object[] {nick1}), boolean.class) || !GsonToUse.gson.fromJson(Sender.post("/users/existe_nickname_de_usuario", new Object[] {nick2}), boolean.class))
             return;
         if (seguir) {
             if ((GsonToUse.gson.fromJson(Sender.post("/users/esta_siguiendo_a", new Object[] {nick1,  nick2} ), boolean.class)))

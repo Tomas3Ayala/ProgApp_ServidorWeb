@@ -5,6 +5,8 @@
  */
 package Servlets;
 
+import DTOs.EspectaculoDto;
+import DTOs.PaqueteDto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -15,7 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
 import logica.clases.Usuario;
 import Utility.Converter;
 import Utility.Sender;
@@ -44,7 +45,7 @@ public class registro_funcion_espectaculo extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         if (session.getAttribute("tipo") == null || session.getAttribute("tipo").equals("artista")) { // chequea que el usuario que inicio sesion NO sea un espectador
-            System.out.println("sauce?");
+            //System.out.println("sauce?");
             return false;
         }
         else { // en caso de que si sea pasa lo que indique el jsp registro_funcion_espectaculo
@@ -65,15 +66,15 @@ public class registro_funcion_espectaculo extends HttpServlet {
                     !(GsonToUse.gson.fromJson(Sender.post("/espectaculos/esta_el_espectaculo_lleno", new Object[] {id_espec} ), boolean.class)) &&
                     !(GsonToUse.gson.fromJson(Sender.post("/users/esta_usuario_registrado_a_funcion", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  id_func} ), boolean.class))
                     ) {
-                System.out.println(((Usuario) session.getAttribute("usuario")).getId() + " " + id_func);
+                //System.out.println(((Usuario) session.getAttribute("usuario")).getId() + " " + id_func);
                 return true;
             }
             else {
                 //http://localhost:8080/ServidorWeb/registro_funcion_espectaculo?espectaculo=21&funcion=5
-                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class)));
-                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_un_espectaculo_aceptado", new Object[] {id_espec} ), boolean.class)));
-                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_funcion_de_espectaculo", new Object[] {id_func,  id_espec} ), boolean.class)));
-                System.out.println("pero que?");
+//                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class)));
+//                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_un_espectaculo_aceptado", new Object[] {id_espec} ), boolean.class)));
+//                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_funcion_de_espectaculo", new Object[] {id_func,  id_espec} ), boolean.class)));
+//                System.out.println("pero que?");
                 return false;
             }
         }
@@ -122,11 +123,12 @@ public class registro_funcion_espectaculo extends HttpServlet {
             int canje2 = Integer.parseInt(request.getParameter("canje2"));
             int canje3 = Integer.parseInt(request.getParameter("canje3"));
 
-            int costo = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), Espectaculo.class)).getCosto();
+            int costo = EspectaculoDto.toEspectaculo(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), EspectaculoDto.class)).getCosto();
             if (paquete.length() > 0 && (GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_paquete", new Object[] {paquete} ), boolean.class)))
-                costo = (int) (costo * (1.0f - (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_info_paquete", new Object[] {paquete} ), Paquete.class)).getDescuento() / 100.0f));
+                costo = (int) (costo * (1.0f - (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_info_paquete", new Object[] {paquete} ), PaqueteDto.class)).getDescuento() / 100.0f));
             
-            if (Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_canje(id_user, canje1) && Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_canje(id_user, canje2) && Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_canje(id_user, canje3)) {
+            
+            if (GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_canje", new Object[] {id_user, canje1}), boolean.class) && GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_canje", new Object[] {id_user, canje2}), boolean.class) && GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_canje", new Object[] {id_user, canje3}), boolean.class)) {
                 costo = 0;
                 Sender.post("/espectaculos/canjear_registro", new Object[] {canje1,  ((Usuario)session.getAttribute("usuario")).getId()} );
                 Sender.post("/espectaculos/canjear_registro", new Object[] {canje2,  ((Usuario)session.getAttribute("usuario")).getId()} );

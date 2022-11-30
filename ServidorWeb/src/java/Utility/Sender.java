@@ -2,6 +2,8 @@ package Utility;
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -9,10 +11,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import logica.clases.Espectaculo;
 
 public class Sender {
-    private static final String BASE_URL = "http://localhost:8080/ServidorAPIREST/api";
+    private static Properties getProperties() {
+        try {
+            FileInputStream file = new FileInputStream(System.getProperty("user.home") + "\\Documents\\GitHub\\ServidorAPIREST\\apiconfig.properties");
+            Properties prop = new Properties();
+            prop.load(file);
+            return prop;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static final Properties properties = getProperties();
+    public static final String BASE_URL = properties.getProperty("url");
     
     public static String get(String api_service, HashMap<String, String> arguments) throws IOException {
         String url = BASE_URL + api_service;
@@ -26,10 +46,10 @@ public class Sender {
                 url += arguments.get(key);
             }
         }
-        System.out.println("url: " + url);
+//        System.out.println("url: " + url);
 
         URL obj = new URL(url);
-        System.out.println("url2: " + obj);
+//        System.out.println("url2: " + obj);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Content-Length", Integer.toString((url).length()));

@@ -7,7 +7,7 @@ servlet but should be the only JSP outside of WEB-INF.
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% 
-    System.out.println(request.getParameter("hola"));
+    //System.out.println(request.getParameter("hola"));
     request.setAttribute("hola", request.getParameter("hola"));
     request.getParameterMap();
     response.sendRedirect("index.htm"); %>

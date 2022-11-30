@@ -1,5 +1,6 @@
+<%@page import="DTOs.EspectaculoDto"%>
 <%@page import="Utility.GsonToUse"%>
-<%@page import="logica.enums.EstadoEspectaculo"%>
+<%@page import="enums.EstadoEspectaculo"%>
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="logica.clases.Categoria"%>
 <%@page import="logica.clases.Plataforma"%>
@@ -12,7 +13,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.time.Period"%>
 <%@page import="java.time.LocalDate"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -60,15 +60,15 @@
             values.put("costo", costo);
             values.put("categorias", categorias);
 
-            System.out.println("====");
-            System.out.println(plataforma);
-            System.out.println(nombre);
-            System.out.println(descripcion);
-            System.out.println(duracion);
-            System.out.println(minimo);
-            System.out.println(maximo);
-            System.out.println(link);
-            System.out.println(costo);
+//            System.out.println("====");
+//            System.out.println(plataforma);
+//            System.out.println(nombre);
+//            System.out.println(descripcion);
+//            System.out.println(duracion);
+//            System.out.println(minimo);
+//            System.out.println(maximo);
+//            System.out.println(link);
+//            System.out.println(costo);
 
             grupo_categorias = new ArrayList<String>(Arrays.asList(categorias.split(",")));
             if (grupo_categorias.size() == 1 && grupo_categorias.get(0).isEmpty())
@@ -171,7 +171,7 @@
                     imageEspectaculo = Base64.getDecoder().decode(parts[1]);
                 }
                 Espectaculo espectaculo = new Espectaculo(plataforma, nombre, descripcion, fduracion, fminimo, fmaximo, link, fcosto, new java.util.Date(), ((Usuario)session.getAttribute("usuario")).getId(), EstadoEspectaculo.INGRESADO);
-                if ((GsonToUse.gson.fromJson(Sender.post("/plataformas/crear_Espectaculo", new Object[] {espectaculo,  imageEspectaculo} ), boolean.class))) {
+                if ((GsonToUse.gson.fromJson(Sender.post("/plataformas/crear_Espectaculo", new Object[] {new EspectaculoDto(espectaculo),  imageEspectaculo} ), boolean.class))) {
                     int idespec = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_idespectaculo", new Object[] {nombre,  plataforma} ), int.class));
                     for (String categoria : grupo_categorias) {
                         int idecatego = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_id_categoria", new Object[] {categoria} ), int.class));

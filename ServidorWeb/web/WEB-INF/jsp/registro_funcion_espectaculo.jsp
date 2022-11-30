@@ -1,3 +1,6 @@
+<%@page import="DTOs.FuncionDto"%>
+<%@page import="DTOs.PaqueteDto"%>
+<%@page import="DTOs.EspectaculoDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="logica.clases.Paquete"%>
 <%@page import="logica.clases.Registro_funcion"%>
@@ -9,7 +12,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.time.Period"%>
 <%@page import="java.time.LocalDate"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -35,11 +37,11 @@
         <title>Registrarse</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript">
-            var costo_original = <%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), Espectaculo.class)).getCosto() %>;
+            var costo_original = <%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), EspectaculoDto.class)).getCosto() %>;
             const costos = {
                 "":0,
                 <% for (String nombre : paquetes_asociados) {
-                    Paquete paquete = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_info_paquete", new Object[] {nombre} ), Paquete.class));
+                    Paquete paquete = PaqueteDto.toPaquete(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_info_paquete", new Object[] {nombre} ), PaqueteDto.class));
                 %>
                     "<%= nombre %>":<%= paquete.getDescuento() %>,
                 <% } %>
@@ -51,7 +53,7 @@
             var tcanje = {
                 <% for (Registro_funcion registro : registros) { %>
                     <% if (registro.getCosto() != 0) {%>
-                        "<%= registro.getFecha_registro() %> - <%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {registro.getId_funcion()} ), Funcion.class)).getNombre()  %>": <%= registro.getId_funcion() %>,
+                        "<%= registro.getFecha_registro() %> - <%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {registro.getId_funcion()} ), FuncionDto.class)).getNombre()  %>": <%= registro.getId_funcion() %>,
                     <% } %>
                 <% } %>
             };
@@ -127,7 +129,7 @@
                         <ul class="list-group">
                             <% for (Registro_funcion registro : registros) { %>
                                 <% if (registro.getCosto() != 0) {%>
-                                    <li class="list-group-item"><%= registro.getFecha_registro() %> - <%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {registro.getId_funcion()} ), Funcion.class)).getNombre()  %></li>
+                                    <li class="list-group-item"><%= registro.getFecha_registro() %> - <%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {registro.getId_funcion()} ), FuncionDto.class)).getNombre()  %></li>
                                 <% } %>
                             <% } %>
                         </ul>
@@ -135,7 +137,7 @@
                 <% } %>
                 <button type="submit" class="btn btn-primary" id="canjear">Canjear</button>
                 <div class="mb-3 por-descuento">
-                    <label class="form-label" id="costo">Costo final: $<%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), Espectaculo.class)).getCosto() %></label>
+                    <label class="form-label" id="costo">Costo final: $<%= (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), EspectaculoDto.class)).getCosto() %></label>
                 </div>
                 <div class="mb-3 por-no-descuento" style="display: none;">
                     <label class="form-label" id="costo">Costo final: <i>$0</i></label>

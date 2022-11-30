@@ -3,6 +3,8 @@
     Created on : 13-oct-2022, 20:25:34
     Author     : Tomas
 --%>
+<%@page import="DTOs.EspectadorDto"%>
+<%@page import="DTOs.ArtistaDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="logica.clases.Espectador"%>
 <%@page import="java.util.Base64"%>
@@ -12,7 +14,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.time.Period"%>
 <%@page import="java.time.LocalDate"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -112,8 +113,8 @@
                 validez.put("pass", false);
                 validez.put("conf_pass", false);
                 errors.put("conf_pass", "La contraseña y la confirmación de contraseña no coinciden");
-                System.out.println(pass);
-                System.out.println(conf_pass);
+//                System.out.println(pass);
+//                System.out.println(conf_pass);
                 error = true;
             }
             if (pass.isEmpty()) {
@@ -160,11 +161,11 @@
                 if (es_artista) {
                     Artista artista = new Artista(descripcion, biografia, link, nickname, nombre, apellido, correo, f, -1, pass);
 
-                    Sender.post("/users/registrar_artista", new Object[] {artista,  imageUsuario} );
+                    Sender.post("/users/registrar_artista", new Object[] {ArtistaDto.fromArtista(artista),  imageUsuario} );
                 }
                 else {
                     Espectador espectador = new Espectador(nickname, nombre, apellido, correo, f, -1, pass);
-                    Sender.post("/users/registrar_espectador", new Object[] {espectador,  imageUsuario} );
+                    Sender.post("/users/registrar_espectador", new Object[] {EspectadorDto.fromEspectador(espectador),  imageUsuario} );
                 }
                 %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><% // me lleva al inicio
             }

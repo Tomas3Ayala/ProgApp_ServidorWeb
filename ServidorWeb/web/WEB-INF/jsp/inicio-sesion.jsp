@@ -1,7 +1,8 @@
+<%@page import="DTOs.EspectadorDto"%>
+<%@page import="DTOs.ArtistaDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="logica.clases.Espectador"%>
 <%@page import="logica.clases.Artista"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="Utility.Converter"%>
 <%@page import="Utility.Sender"%>
 <%@page import="com.google.gson.Gson"%>
@@ -13,16 +14,16 @@
             String auto_fill_nickname = "";
             String nick_error = "Este campo es obligatorio";
             String pass_error = "Este campo es obligatorio";
-            System.out.println("hewow? " + request.getMethod());
+            //System.out.println("hewow? " + request.getMethod());
             if (request.getMethod().equals("POST")) {
-                System.out.println("llego?");
+                //System.out.println("llego?");
                 String nickname = request.getParameter("nickname");
                 String pass = request.getParameter("pass");
                 boolean existe_usuario = false;
                 if ((GsonToUse.gson.fromJson(Sender.post("/users/existe_nickname_de_usuario", new Object[] {nickname} ), boolean.class))) {
                     existe_usuario = true;
                 }
-                else if ((GsonToUse.gson.fromJson(Sender.post("/users/existe_correo_de_usuario", new Object[] {nickname} ), boolean.class))) {
+                else if ((GsonToUse.gson.fromJson(Sender.post("/users/existe_correo_de_usuario", new Object[] {nickname} ), boolean.class))) { // no recuerdo haber probado esto, capaz no funcione
                     existe_usuario = true;
                     nickname = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_nickname_de_correo", new Object[] {nickname} ), String.class));
                 }
@@ -30,10 +31,10 @@
                     nick_error = "Nickname o correo no encontrado";
                 }
                 if (existe_usuario) {
-                    Artista artista = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), Artista.class));
-                    System.out.println("llego");
+                    Artista artista = ArtistaDto.toArtista(GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), ArtistaDto.class));
+                    //System.out.println("llego");
                     if (artista == null) {
-                        Espectador espectador = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), Espectador.class));
+                        Espectador espectador = EspectadorDto.toEspectador(GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), EspectadorDto.class));
                         if (espectador.getContrasenia().equals(pass)) {
                             session.setAttribute("tipo", "espectador");
                             session.setAttribute("usuario", (Usuario)espectador);

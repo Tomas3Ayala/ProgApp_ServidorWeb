@@ -12,9 +12,7 @@
 <%@page import="java.io.FileNotFoundException"%>
 <%@page import="java.util.Properties"%>
 <%@page import="java.io.FileInputStream"%>
-<%@page import="Persistencia.ConexionDB"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.util.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

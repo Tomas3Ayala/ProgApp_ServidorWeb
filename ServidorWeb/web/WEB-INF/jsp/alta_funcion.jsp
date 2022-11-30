@@ -1,6 +1,7 @@
+<%@page import="DTOs.FuncionDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="logica.enums.EstadoEspectaculo"%>
+<%@page import="enums.EstadoEspectaculo"%>
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="logica.clases.Funcion"%>
 <%@page import="logica.clases.Categoria"%>
@@ -14,7 +15,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.time.Period"%>
 <%@page import="java.time.LocalDate"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -40,7 +40,7 @@
             String espectaculo = request.getParameter("espectaculo");
             String nombre = request.getParameter("nombre");
             String fecha = request.getParameter("fecha");
-            System.out.println(fecha);
+//            System.out.println(fecha);
             String horainicio = request.getParameter("hora_inicio");
             String imagen = request.getParameter("imagen");
             SimpleDateFormat formated =new SimpleDateFormat("yyyy-MM-dd");
@@ -55,11 +55,11 @@
             values.put("artistas", artistas);
             
 
-            System.out.println("====");
-            System.out.println(nombre);
-            System.out.println(fecha);
-            System.out.println(horainicio);
-            System.out.println(espectaculo);
+//            System.out.println("====");
+//            System.out.println(nombre);
+//            System.out.println(fecha);
+//            System.out.println(horainicio);
+//            System.out.println(espectaculo);
             //System.out.println(artistas);
             
             
@@ -119,7 +119,7 @@
                 Integer id_espectaculo = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_idespectaculo", new Object[] {espectaculo} ), int.class));
                 
                 Funcion funcion = new Funcion (nombre, ffecha, fhora_inicio, new java.util.Date(), id_espectaculo);
-                if ((GsonToUse.gson.fromJson(Sender.post("/plataformas/Alta_de_Funcion", new Object[] {funcion,  imageFuncion} ), boolean.class))) {
+                if ((GsonToUse.gson.fromJson(Sender.post("/plataformas/Alta_de_Funcion", new Object[] {FuncionDto.fromFuncion(funcion),  imageFuncion} ), boolean.class))) {
                     int idfuncion = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_idfuncion", new Object[] {nombre} ), int.class));
                     for (String artista : grupo_artistas) {
                      int idartista = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_idartista", new Object[] {artista} ), int.class));
@@ -259,8 +259,8 @@
                     <div class="hstack gap-3">
                         <select class="form-select" id="seleccion-artista">
                             <option value="" selected>Artista</option>
-                            <% for (Artista artista : Converter.to_Artista_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_artistas_disponibles", new Object[] {} ), ArrayList.class))) { %>
-                             <option><%= artista.getNickname()%></option>
+                            <% for (Object artista : Converter.to_Artista_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_artistas_disponibles", new Object[] {} ), ArrayList.class))) { %>
+                             <option><%= ((Artista) artista).getNickname()%></option>
                             <% } %>
                         </select>
                         <button type="button" class="btn btn-primary" onclick="agregar_artista()">Agregar</button>

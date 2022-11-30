@@ -1,7 +1,6 @@
 <%@page import="Utility.GsonToUse"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="logica.clases.Categoria"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="logica.clases.Usuario"%>
 <%@page import="Utility.Converter"%>
 <%@page import="Utility.Sender"%>

@@ -3,16 +3,19 @@
     Created on : 22-oct-2022, 17:50:09
     Author     : Tomas
 --%>
+<%@page import="DTOs.FuncionDto"%>
+<%@page import="DTOs.EspectadorDto"%>
+<%@page import="DTOs.ArtistaDto"%>
+<%@page import="DTOs.ArtistaDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="logica.clases.Paquete"%>
 <%@page import="logica.clases.Registro_funcion"%>
 <%@page import="logica.clases.Espectador"%>
-<%@page import="logica.enums.EstadoEspectaculo"%>
+<%@page import="enums.EstadoEspectaculo"%>
 <%@page import="logica.clases.Espectaculo"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="logica.clases.Artista"%>
 <%@page import="logica.clases.Funcion"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="Utility.Converter"%>
 <%@page import="Utility.Sender"%>
 <%@page import="com.google.gson.Gson"%>
@@ -27,9 +30,9 @@
         String nickname = request.getParameter("usuario");
         String tipo = "artista";
         Usuario usuario = null;
-        Artista artista = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), Artista.class));
+        Artista artista = ArtistaDto.toArtista(GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), ArtistaDto.class));
         if (artista == null) {
-            Espectador espectador = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), Espectador.class));
+            Espectador espectador = EspectadorDto.toEspectador(GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), EspectadorDto.class));
             usuario = espectador;
             tipo = "espectador";
             // cosas de espectador
@@ -183,7 +186,7 @@
 
                         <ul class="list-group">
                             <% for (Registro_funcion registro : registros_a_funciones) {
-                                Funcion funcion = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {registro.getId_funcion()} ), Funcion.class));
+                                Funcion funcion = FuncionDto.toFuncion(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funcion_por_id", new Object[] {registro.getId_funcion()} ), FuncionDto.class));
                             %>
                                 <a href="/ServidorWeb/consulta_funcion?funcion=<%= registro.getId_funcion() %>">
                                     <li class="list-group-item">
