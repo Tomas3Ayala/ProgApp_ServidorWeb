@@ -5,6 +5,11 @@
  */
 package Servlets;
 
+import DTOs.PaqueteDto;
+import Utility.Converter;
+import Utility.GsonToUse;
+import Utility.Sender;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,7 +19,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
 import logica.clases.Espectaculo;
 
 /**
@@ -47,12 +51,12 @@ public class agregar_a_paquete extends HttpServlet {
         }
         if (session.getAttribute("tipo") == null || !session.getAttribute("tipo").equals("artista"))
             return false;
-        if (!Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_paquete(id_paqu))
+        if (!(GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_paquete", new Object[] {id_paqu} ), boolean.class)))
             return false;
-        if (!Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec))
+        if (!(GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class)))
             return false;
 
-        ArrayList<Espectaculo> espectaculos_no_en_paquete = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculos_aceptados_no_de_paquete(id_paqu);
+        ArrayList<Espectaculo> espectaculos_no_en_paquete = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculos_aceptados_no_de_paquete", new Object[] {id_paqu} ), ArrayList.class));
         boolean no_enpac = false;
         for (Espectaculo espe : espectaculos_no_en_paquete) {
             if (espe.getId() == id_espec) {
@@ -71,7 +75,11 @@ public class agregar_a_paquete extends HttpServlet {
         if (chequear_datos_validos(request, response)) {
             int id_paqu = Integer.parseInt(request.getParameter("paquete"));
             int id_espec = Integer.parseInt(request.getParameter("espectaculo"));
-            Fabrica.getInstance().getInstanceControladorPlataforma().Agregar_espectaculo_a_paquete(id_espec, Fabrica.getInstance().getInstanceControladorPlataforma().obtener_info_paquetes(id_paqu).getNombre());
+            ///plataformas/obtener_info_paquetes
+            Sender.post("/plataformas/Agregar_espectaculo_a_paquete", new Object[] {id_espec, GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_info_paquetes", new Object[] {}), PaqueteDto.class).getNombre()});
+            //Fabrica.getInstance().getInstanceControladorPlataforma().obtener_info_paquetes(id_paqu).getNombre()
+//            Fabrica.getInstance().getInstanceControladorPlataforma().Agregar_espectaculo_a_paquete(, );
+
 //            response.sendRedirect("/ServidorWeb/consulta_paquete?paquete=" + id_paqu);
             response.sendRedirect("/ServidorWeb");
         }

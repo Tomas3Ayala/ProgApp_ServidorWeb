@@ -15,7 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import Utility.GsonToUse;
 
 /**
  *
@@ -42,14 +45,14 @@ public class consulta_paquete extends HttpServlet {
         {
             try {
                 int id_paque = Integer.parseInt(paq);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_paquete(id_paque)) {
+                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_paquete", new Object[] {id_paque} ), boolean.class))) {
                     ServletContext context = getServletContext();
                     RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_paquete.jsp");
                     dispatcher.forward(request, response);
                 }
-                else
-                    
-                    System.out.println("hola"+paq);
+//                else
+//                    
+//                    System.out.println("hola"+paq);
                    // response.sendRedirect("/ServidorWeb");
             } catch (NumberFormatException ex) {
                 response.sendRedirect("/ServidorWeb");

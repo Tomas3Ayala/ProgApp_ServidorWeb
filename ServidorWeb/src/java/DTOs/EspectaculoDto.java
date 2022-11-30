@@ -1,10 +1,19 @@
 package DTOs;
 
-import java.util.Date;
 import enums.EstadoEspectaculo;
 import java.io.Serializable;
+import java.util.Date;
+import logica.clases.Artista;
+import logica.clases.Espectaculo;
 
 public class EspectaculoDto implements Serializable {
+
+    public static Espectaculo toEspectaculo(EspectaculoDto item) {
+        if (item == null)
+            return null;
+        return new Espectaculo(item.getPlataforma(), item.getNombre(), item.getDescripcion(), item.getDuracion(), item.getMin_espectador(), item.getMax_espectador(), item.getUrl(), item.getCosto(), new Date(item.getFecha_registro()), item.getId(), item.getId_artista(), item.getEstado());
+    }
+
     private String plataforma;
     private String nombre;
     private String descripcion;
@@ -13,7 +22,7 @@ public class EspectaculoDto implements Serializable {
     private int max_espectador;
     private String url;
     private int costo;
-    private Date fecha_registro;
+    private long fecha_registro;
     private int id;
     private int id_artista;
     private EstadoEspectaculo estado;
@@ -23,7 +32,7 @@ public class EspectaculoDto implements Serializable {
 
    
 
-    public EspectaculoDto(String plataforma, String nombre, String descripcion, int duracion, int min_espectador, int max_espectador, String url, int costo, Date fecha_registro, int id, int id_artista) {
+    public EspectaculoDto(String plataforma, String nombre, String descripcion, int duracion, int min_espectador, int max_espectador, String url, int costo, long fecha_registro, int id, int id_artista, EstadoEspectaculo estado) {
         this.plataforma = plataforma;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -34,67 +43,26 @@ public class EspectaculoDto implements Serializable {
         this.costo = costo;
         this.fecha_registro = fecha_registro;
         this.id = id;
-        this.id_artista = id_artista;
-    }
-    public EspectaculoDto( String nombre, String descripcion, int duracion, int min_espectador, int max_espectador, String url, int costo, Date fecha_registro, int id, int id_artista) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.duracion = duracion;
-        this.min_espectador = min_espectador;
-        this.max_espectador = max_espectador;
-        this.url = url;
-        this.costo = costo;
-        this.fecha_registro = fecha_registro;
-        this.id = id;
-        this.id_artista = id_artista;
-    }
-    public EspectaculoDto(String plataforma, String nombre, String descripcion, int duracion, int min_espectador, int max_espectador, String url, int costo, Date fecha_registro, int id, int id_artista, String categoria) {
-        this.plataforma = plataforma;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.duracion = duracion;
-        this.min_espectador = min_espectador;
-        this.max_espectador = max_espectador;
-        this.url = url;
-        this.costo = costo;
-        this.fecha_registro = fecha_registro;
-        this.id = id;
-        this.id_artista = id_artista;
-        this.categoria = categoria;
-    }
-    
-    public EspectaculoDto(String plataforma, String nombre, String descripcion, int duracion, int min_espectador, int max_espectador, String url, int costo, Date fecha_registro, int id_artista, EstadoEspectaculo estado) {
-        this.plataforma = plataforma;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.duracion = duracion;
-        this.min_espectador = min_espectador;
-        this.max_espectador = max_espectador;
-        this.url = url;
-        this.costo = costo;
-        this.fecha_registro = fecha_registro;
         this.id_artista = id_artista;
         this.estado = estado;
-       // this.categoria = categoria;
     }
 
-    public EspectaculoDto(String plataforma, String nombre, String descripcion, int duracion, int min_espectador, int max_espectador, String url, int costo, Date fecha_registro, int id, int id_artista, EstadoEspectaculo estado) {
-        this.plataforma = plataforma;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.duracion = duracion;
-        this.min_espectador = min_espectador;
-        this.max_espectador = max_espectador;
-        this.url = url;
-        this.costo = costo;
-        this.fecha_registro = fecha_registro;
-        this.id = id;
-        this.id_artista = id_artista;
-        this.estado = estado;
-       // this.categoria = categoria;
+    public EspectaculoDto(Espectaculo item) {
+        this.plataforma = item.getPlataforma();
+        this.nombre = item.getNombre();
+        this.descripcion = item.getDescripcion();
+        this.duracion = item.getDuracion();
+        this.min_espectador = item.getMin_espectador();
+        this.max_espectador = item.getMax_espectador();
+        this.url = item.getUrl();
+        this.costo = item.getCosto();
+        this.fecha_registro = item.getFecha_registro().getTime();
+        this.id = item.getId();
+        this.id_artista = item.getId_artista();
+        this.estado = EstadoEspectaculo.valueOf(item.getEstado().toString()); // DEBUG, cambiar
     }
-    
-      public String getCategoria() {
+
+    public String getCategoria() {
         return categoria;
     }
 
@@ -180,11 +148,11 @@ public class EspectaculoDto implements Serializable {
         this.costo = costo;
     }
 
-    public Date getFecha_registro() {
+    public long getFecha_registro() {
         return fecha_registro;
     }
 
-    public void setFecha_registro(Date fecha_registro) {
+    public void setFecha_registro(long fecha_registro) {
         this.fecha_registro = fecha_registro;
     }
 

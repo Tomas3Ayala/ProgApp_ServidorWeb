@@ -10,9 +10,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import logica.Fabrica;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.MediaType;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import logica.clases.Paquete;
+import Utility.GsonToUse;
 
 @WebServlet(name = "imagen", urlPatterns = {"/imagen"})
 public class imagen extends HttpServlet {
@@ -61,28 +65,28 @@ public class imagen extends HttpServlet {
         
         response.setContentType(MediaType.ALL_VALUE);
         if (nick != null) {
-            byte[] bytes = Fabrica.getInstance().getInstanceControllerUsuario().obtener_imagen_usuario_con_nickname(nick);
+            byte[] bytes = (GsonToUse.gson.fromJson(Sender.post("/users/obtener_imagen_usuario_con_nickname", new Object[] {nick} ), byte[].class));
             if (bytes != null)
                 response.getOutputStream().write(bytes);
             else
                 default_image(response);
         }
-        else if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_funcion(id_func)) {
-            byte[] bytes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_imagen_funcion(id_func);
+        else if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_funcion", new Object[] {id_func} ), boolean.class))) {
+            byte[] bytes = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_imagen_funcion", new Object[] {id_func} ), byte[].class));
             if (bytes != null)
                 response.getOutputStream().write(bytes);
             else
                 default_image(response);
         }
-        else if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec)) {
-            byte[] bytes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_imagen_espectaculo(id_espec);
+        else if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class))) {
+            byte[] bytes = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_imagen_espectaculo", new Object[] {id_espec} ), byte[].class));
             if (bytes != null)
                 response.getOutputStream().write(bytes);
             else
                 default_image(response);
         }
-        else if (Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_info_paquete(paquete) != null) {
-            byte[] bytes = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_imagen_paquete(paquete);
+        else if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_info_paquete", new Object[] {paquete} ), Paquete.class)) != null) {
+            byte[] bytes = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_imagen_paquete", new Object[] {paquete} ), byte[].class));
             if (bytes != null)
                 response.getOutputStream().write(bytes);
             else

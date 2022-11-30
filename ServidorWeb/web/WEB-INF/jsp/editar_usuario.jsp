@@ -1,3 +1,5 @@
+<%@page import="DTOs.ArtistaDto"%>
+<%@page import="DTOs.EspectadorDto"%>
 <%@page import="logica.clases.Espectador"%>
 <%@page import="java.util.Base64"%>
 <%@page import="java.time.ZoneId"%>
@@ -6,10 +8,13 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.time.Period"%>
 <%@page import="java.time.LocalDate"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="Utility.GsonToUse"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,7 +24,10 @@
         HashMap<String, String> values = new HashMap<String, String>();
         HashMap<String, String> errors = new HashMap<String, String>();
         HashMap<String, Boolean> validez = new HashMap<String, Boolean>();
-        if (request.getMethod() == "POST") {
+        
+//        System.out.println("D");
+        if (request.getMethod().equals("POST")) {
+//            System.out.println("lalasdasd");
             validez.put("nombre", true);
             validez.put("apellido", true);
             validez.put("pass", true);
@@ -69,8 +77,8 @@
                 validez.put("pass", false);
                 validez.put("conf_pass", false);
                 errors.put("conf_pass", "La contraseña y la confirmación de contraseña no coinciden");
-                System.out.println(pass);
-                System.out.println(conf_pass);
+//                System.out.println(pass);
+//                System.out.println(conf_pass);
                 error = true;
             }
             if (pass.isEmpty()) {
@@ -111,7 +119,7 @@
                 if (!imagen.isEmpty()) {
                     String[] parts = imagen.split(",");
                     byte[] imageUsuario = Base64.getDecoder().decode(parts[1]);
-                    Fabrica.getInstance().getInstanceControllerUsuario().modificar_imagen_de_usuario(((Usuario) session.getAttribute("usuario")).getId(), imageUsuario);
+                    Sender.post("/users/modificar_imagen_de_usuario", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  imageUsuario} );
                 }
                 java.util.Date f = java.util.Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
@@ -119,15 +127,15 @@
                 String correo = ((Usuario) session.getAttribute("usuario")).getCorreo();
                 if (es_artista) {
                     Artista artista = new Artista(descripcion, biografia, link, nickname, nombre, apellido, correo, f, -1, pass);
-                    Fabrica.getInstance().getInstanceControllerUsuario().modificar_artista(((Usuario) session.getAttribute("usuario")).getId(), artista);
+                    Sender.post("/users/modificar_artista", new Object[] {((Usuario) session.getAttribute("usuario")).getId(), ArtistaDto.fromArtista(artista)} );
                     session.setAttribute("tipo", "artista");
-                    session.setAttribute("usuario", (Usuario)Fabrica.getInstance().getInstanceControllerUsuario().obtener_artista_de_nickname(nickname));
+                    session.setAttribute("usuario", (Usuario)(ArtistaDto.toArtista(GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), ArtistaDto.class))));
                 }
                 else {
                     Espectador espectador = new Espectador(nickname, nombre, apellido, correo, f, -1, pass);
-                    Fabrica.getInstance().getInstanceControllerUsuario().modificar_espectador(((Usuario) session.getAttribute("usuario")).getId(), espectador);
+                    Sender.post("/users/modificar_espectador", new Object[] {((Usuario) session.getAttribute("usuario")).getId(), EspectadorDto.fromEspectador(espectador)} );
                     session.setAttribute("tipo", "espectador");
-                    session.setAttribute("usuario", (Usuario)Fabrica.getInstance().getInstanceControllerUsuario().obtener_espectador_de_nickname(nickname));
+                    session.setAttribute("usuario", (Usuario)(EspectadorDto.toEspectador(GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), EspectadorDto.class))));
                 }
                 %>
                 <meta http-equiv="Refresh" content="0; url='/ServidorWeb'" />
@@ -137,7 +145,7 @@
         else {
             values.put("nombre", ((Usuario)session.getAttribute("usuario")).getNombre());
             values.put("apellido", ((Usuario)session.getAttribute("usuario")).getApellido());
-            values.put("fecha", ((Usuario)session.getAttribute("usuario")).getNacimiento().toString());
+            values.put("fecha", Converter.format_date(((Usuario)session.getAttribute("usuario")).getNacimiento()));
             if (es_artista) {
                 values.put("descripcion", ((Artista)session.getAttribute("usuario")).getDescripcion());
                 values.put("biografia", ((Artista)session.getAttribute("usuario")).getBiografia());

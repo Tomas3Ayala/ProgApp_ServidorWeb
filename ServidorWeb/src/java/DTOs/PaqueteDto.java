@@ -2,16 +2,29 @@ package DTOs;
 
 import java.io.Serializable;
 import java.util.Date;
+import logica.clases.Paquete;
 
 public class PaqueteDto implements Serializable{
+    public static Paquete toPaquete(PaqueteDto item) {
+        if (item == null)
+            return null;
+        return new Paquete(item.getNombre(), item.getDescripcion(), new Date(item.getFecha_inicio()), new Date(item.getFecha_fin()), item.getDescuento(), item.getId());
+    }
+
+    public static PaqueteDto fromPaquete(Paquete item) {
+        if (item == null)
+            return null;
+        return new PaqueteDto(item);
+    }
+    
     private String nombre;
     private String descripcion;
-    private Date fecha_inicio;
-    private Date fecha_fin;
+    private long fecha_inicio;
+    private long fecha_fin;
     private int descuento;
     private int id;
 
-    public PaqueteDto(String nombre, String descripcion, Date fecha_inicio, Date fecha_fin, int descuento, int id) {
+    public PaqueteDto(String nombre, String descripcion, long fecha_inicio, long fecha_fin, int descuento, int id) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fecha_inicio = fecha_inicio;
@@ -19,12 +32,14 @@ public class PaqueteDto implements Serializable{
         this.descuento = descuento;
         this.id = id;
     }
-     public PaqueteDto(String nombre, String descripcion, Date fecha_inicio, Date fecha_fin, int descuento) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
-        this.descuento = descuento;
+
+    public PaqueteDto(Paquete r) {
+        this.nombre = r.getNombre();
+        this.descripcion = r.getDescripcion();
+        this.fecha_inicio = r.getFecha_inicio().getTime();
+        this.fecha_fin = r.getFecha_fin().getTime();
+        this.descuento = r.getDescuento();
+        this.id = r.getId();
     }
 
     public String getNombre() {
@@ -43,19 +58,19 @@ public class PaqueteDto implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public Date getFecha_inicio() {
+    public long getFecha_inicio() {
         return fecha_inicio;
     }
 
-    public void setFecha_inicio(Date fecha_inicio) {
+    public void setFecha_inicio(long fecha_inicio) {
         this.fecha_inicio = fecha_inicio;
     }
 
-    public Date getFecha_fin() {
+    public long getFecha_fin() {
         return fecha_fin;
     }
 
-    public void setFecha_fin(Date fecha_fin) {
+    public void setFecha_fin(long fecha_fin) {
         this.fecha_fin = fecha_fin;
     }
 

@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import DTOs.EspectaculoDto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -15,10 +16,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
 import logica.clases.Espectaculo;
 import logica.clases.Usuario;
-import logica.enums.EstadoEspectaculo;
+import enums.EstadoEspectaculo;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import Utility.GsonToUse;
 
 /**
  *
@@ -40,7 +44,7 @@ public class consulta_espectaculo extends HttpServlet {
             throws ServletException, IOException {
         String espec = request.getParameter("espectaculo");
         if (espec == null){
-            //System.out.println("algo 1");
+//            System.out.println("algo 1");
             response.sendRedirect("/ServidorWeb");
            
         } 
@@ -48,24 +52,27 @@ public class consulta_espectaculo extends HttpServlet {
         {
             try {
                 int id_espec = Integer.parseInt(espec);
-                if (Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec)) {
+                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class))) {
                     HttpSession session = request.getSession(true);
-                    Espectaculo espectaculo = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(id_espec);
+                    Espectaculo espectaculo = EspectaculoDto.toEspectaculo(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), EspectaculoDto.class));
+//                    System.out.println("estado: " + espectaculo.getEstado());
                     if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO || (session.getAttribute("usuario") != null && espectaculo.getId_artista() == ((Usuario)session.getAttribute("usuario")).getId()))
                     {
                         ServletContext context = getServletContext();
                         RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_espectaculo.jsp");
                         dispatcher.forward(request, response);
                     }
-                    else
+                    else {
+//                        System.out.println("algo 2");
                         response.sendRedirect("/ServidorWeb");
+                    }
                 }
                 else{
-                    //System.out.println("algo 2");
+//                    System.out.println("algo 3");
                     response.sendRedirect("/ServidorWeb");
                 }
             } catch (NumberFormatException ex) {
-                //System.out.println("algo 3");
+//                System.out.println("algo 4");
                 response.sendRedirect("/ServidorWeb");
             }
         }

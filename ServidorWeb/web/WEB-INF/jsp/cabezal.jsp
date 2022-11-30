@@ -1,6 +1,10 @@
+<%@page import="Utility.GsonToUse"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="logica.clases.Categoria"%>
-<%@page import="logica.Fabrica"%>
 <%@page import="logica.clases.Usuario"%>
+<%@page import="Utility.Converter"%>
+<%@page import="Utility.Sender"%>
+<%@page import="com.google.gson.Gson"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -70,8 +74,8 @@
                             <!--<label class="form-label">Categoría</label>-->
                             <select class="form-select" name="categoria" id="categoria" required>
                                 <option value="">Categoría</option>
-                                <% for (Categoria ___cat : Fabrica.getInstance().getInstanceControladorPlataforma().obtener_categorias()) { %>
-                                    <option><%= ___cat.getNombre() %></option>
+                                <% for (Object ___cat : Converter.to_Categoria_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_categorias", new Object[] {} ), ArrayList.class))) { %>
+                                    <option><%= ((Categoria) ___cat).getNombre() %></option>
                                 <% } %>
                             </select>
                         </div>
@@ -79,8 +83,8 @@
                             <!--<label class="form-label">Categoría</label>-->
                             <select class="form-select" name="plataforma" id="plataforma" required>
                                 <option value="">Plataforma</option>
-                                <% for (String ___plat : Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_plataformas_disponibles()) { %>
-                                    <option><%= ___plat %></option>
+                                <% for (Object ___plat : (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_plataformas_disponibles", new Object[] {} ), ArrayList.class))) { %>
+                                    <option><%= (String) ___plat %></option>
                                 <% } %>
                             </select>
                         </div>

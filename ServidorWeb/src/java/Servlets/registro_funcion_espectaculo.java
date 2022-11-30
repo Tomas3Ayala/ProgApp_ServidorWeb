@@ -5,6 +5,8 @@
  */
 package Servlets;
 
+import DTOs.EspectaculoDto;
+import DTOs.PaqueteDto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -15,8 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import logica.Fabrica;
 import logica.clases.Usuario;
+import Utility.Converter;
+import Utility.Sender;
+import com.google.gson.Gson;
+import logica.clases.Espectaculo;
+import logica.clases.Paquete;
+import Utility.GsonToUse;
 
 /**
  *
@@ -38,7 +45,7 @@ public class registro_funcion_espectaculo extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         if (session.getAttribute("tipo") == null || session.getAttribute("tipo").equals("artista")) { // chequea que el usuario que inicio sesion NO sea un espectador
-            System.out.println("sauce?");
+            //System.out.println("sauce?");
             return false;
         }
         else { // en caso de que si sea pasa lo que indique el jsp registro_funcion_espectaculo
@@ -52,22 +59,22 @@ public class registro_funcion_espectaculo extends HttpServlet {
             id_espec = Integer.parseInt(espectaculo);
             id_func = Integer.parseInt(funcion);
             if (espectaculo != null && funcion != null &&
-                    Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec) &&
-                    Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_funcion(id_func) &&
-                    Fabrica.getInstance().getInstanceControladorEspectaculo().es_un_espectaculo_aceptado(id_espec) &&
-                    Fabrica.getInstance().getInstanceControladorEspectaculo().es_funcion_de_espectaculo(id_func, id_espec) &&
-                    !Fabrica.getInstance().getInstanceControladorEspectaculo().esta_el_espectaculo_lleno(id_espec) &&
-                    !Fabrica.getInstance().getInstanceControllerUsuario().esta_usuario_registrado_a_funcion(((Usuario) session.getAttribute("usuario")).getId(), id_func)
+                    (GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class)) &&
+                    (GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_funcion", new Object[] {id_func} ), boolean.class)) &&
+                    (GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_un_espectaculo_aceptado", new Object[] {id_espec} ), boolean.class)) &&
+                    (GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_funcion_de_espectaculo", new Object[] {id_func,  id_espec} ), boolean.class)) &&
+                    !(GsonToUse.gson.fromJson(Sender.post("/espectaculos/esta_el_espectaculo_lleno", new Object[] {id_espec} ), boolean.class)) &&
+                    !(GsonToUse.gson.fromJson(Sender.post("/users/esta_usuario_registrado_a_funcion", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  id_func} ), boolean.class))
                     ) {
-                System.out.println(((Usuario) session.getAttribute("usuario")).getId() + " " + id_func);
+                //System.out.println(((Usuario) session.getAttribute("usuario")).getId() + " " + id_func);
                 return true;
             }
             else {
                 //http://localhost:8080/ServidorWeb/registro_funcion_espectaculo?espectaculo=21&funcion=5
-                System.out.println(Fabrica.getInstance().getInstanceControladorEspectaculo().existe_id_de_espectaculo(id_espec));
-                System.out.println(Fabrica.getInstance().getInstanceControladorEspectaculo().es_un_espectaculo_aceptado(id_espec));
-                System.out.println(Fabrica.getInstance().getInstanceControladorEspectaculo().es_funcion_de_espectaculo(id_func, id_espec));
-                System.out.println("pero que?");
+//                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_id_de_espectaculo", new Object[] {id_espec} ), boolean.class)));
+//                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_un_espectaculo_aceptado", new Object[] {id_espec} ), boolean.class)));
+//                System.out.println((GsonToUse.gson.fromJson(Sender.post("/espectaculos/es_funcion_de_espectaculo", new Object[] {id_func,  id_espec} ), boolean.class)));
+//                System.out.println("pero que?");
                 return false;
             }
         }
@@ -116,18 +123,19 @@ public class registro_funcion_espectaculo extends HttpServlet {
             int canje2 = Integer.parseInt(request.getParameter("canje2"));
             int canje3 = Integer.parseInt(request.getParameter("canje3"));
 
-            int costo = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculo(id_espec).getCosto();
-            if (paquete.length() > 0 && Fabrica.getInstance().getInstanceControladorEspectaculo().existe_paquete(paquete))
-                costo = (int) (costo * (1.0f - Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_info_paquete(paquete).getDescuento() / 100.0f));
+            int costo = EspectaculoDto.toEspectaculo(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo", new Object[] {id_espec} ), EspectaculoDto.class)).getCosto();
+            if (paquete.length() > 0 && (GsonToUse.gson.fromJson(Sender.post("/espectaculos/existe_paquete", new Object[] {paquete} ), boolean.class)))
+                costo = (int) (costo * (1.0f - (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_info_paquete", new Object[] {paquete} ), PaqueteDto.class)).getDescuento() / 100.0f));
             
-            if (Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_canje(id_user, canje1) && Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_canje(id_user, canje2) && Fabrica.getInstance().getInstanceControladorEspectaculo().chequear_canje(id_user, canje3)) {
+            
+            if (GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_canje", new Object[] {id_user, canje1}), boolean.class) && GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_canje", new Object[] {id_user, canje2}), boolean.class) && GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_canje", new Object[] {id_user, canje3}), boolean.class)) {
                 costo = 0;
-                Fabrica.getInstance().getInstanceControladorEspectaculo().canjear_registro(canje1, ((Usuario)session.getAttribute("usuario")).getId());
-                Fabrica.getInstance().getInstanceControladorEspectaculo().canjear_registro(canje2, ((Usuario)session.getAttribute("usuario")).getId());
-                Fabrica.getInstance().getInstanceControladorEspectaculo().canjear_registro(canje3, ((Usuario)session.getAttribute("usuario")).getId());
+                Sender.post("/espectaculos/canjear_registro", new Object[] {canje1,  ((Usuario)session.getAttribute("usuario")).getId()} );
+                Sender.post("/espectaculos/canjear_registro", new Object[] {canje2,  ((Usuario)session.getAttribute("usuario")).getId()} );
+                Sender.post("/espectaculos/canjear_registro", new Object[] {canje3,  ((Usuario)session.getAttribute("usuario")).getId()} );
             }
 
-            Fabrica.getInstance().getInstanceControladorEspectaculo().registrar_espectador_en_funcion_de_espectaculo(id_user, id_func, costo);
+            Sender.post("/espectaculos/registrar_espectador_en_funcion_de_espectaculo", new Object[] {id_user,  id_func,  costo} );
             response.sendRedirect("/ServidorWeb");
         }
         else
