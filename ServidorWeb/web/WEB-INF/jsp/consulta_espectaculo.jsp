@@ -52,14 +52,18 @@
                         <% if (categorias.size() > 0) { %>
                             <span>
                                 <strong>Categorias:</strong>
-                                <% for (String categoria : categorias) {
-                                    if (categoria != categorias.get(0)) { %>
-                                        ,
-                                    <% } %>
-                                    <%=categoria%>
-                                <% } %>
-                            </span><br>
-                        <% } %>
+                             <% for (String categoria : categorias) {
+                                if ("Charlas TED".equals(categoria) ){ %>
+                                <span class="badge" style="background-color: green"><%= categoria %></span>
+                                 <% } if ("Standup".equals(categoria) ){ %>
+                                <span class="badge" style="background-color: blue"> <%= categoria %> </span>
+                                <% } if ("Charlas TEO".equals(categoria) ){ %>
+                                <span class="badge" style="background-color: #c26129"> <%= categoria %></span>
+                                 <% } else if ("Toques".equals(categoria) ){ %>
+                                 <span class="badge" style="background-color: black"><%= categoria %></span>
+                                 <% } %>   
+                             <% } %>
+                        <% } %> 
                     <!--     <span>Estado:  espectaculo.getEstado().toString() %></span><br> -->
                     </div>
                 </div>

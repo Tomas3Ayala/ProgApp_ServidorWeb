@@ -39,7 +39,8 @@ public class comprar_paquete extends HttpServlet {
 
         if (!comprado) {
             Fabrica.getInstance().getInstanceControllerUsuario().comprar_paquete(id_espec, id_paqu);
-//            response.sendRedirect("/ServidorWeb/consulta_paquete?paquete=" + id_paqu); 
+            session.setAttribute("mensaje", "PAQUETE COMPRADO CON ÉXITO");
+            response.sendRedirect("/ServidorWeb/consulta_paquete?paquete=" + id_paqu); 
         } else {
             ServletContext context = getServletContext();
             RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/consulta_paquete.jsp");

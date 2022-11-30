@@ -158,10 +158,12 @@
                     Artista artista = new Artista(descripcion, biografia, link, nickname, nombre, apellido, correo, f, -1, pass);
 
                     Fabrica.getInstance().getInstanceControllerUsuario().registrar_artista(artista, imageUsuario);
+                    session.setAttribute("mensaje", "ARTISTA REGISTRADO CON ÉXITO");
                 }
                 else {
                     Espectador espectador = new Espectador(nickname, nombre, apellido, correo, f, -1, pass);
                     Fabrica.getInstance().getInstanceControllerUsuario().registrar_espectador(espectador, imageUsuario);
+                    session.setAttribute("mensaje", "ESPECTADOR REGISTRADO CON ÉXITO");
                 }
                 %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><% // me lleva al inicio
             }
@@ -198,7 +200,7 @@
             }
 
             $( document ).ready(function() {
-                $(".toast").toast("show");
+                
                 
                 <% if (!es_artista) { %>
                     $(".parte_de_artista").hide(); // oculta los datos de artista
@@ -237,17 +239,10 @@
         
     </head>
     <body>
-        <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    ESO Y DEJALO ASI
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
+     
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: buttonface">
+            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: lemonchiffon">
                 <div class="mb-3">
                     <label class="form-label">Nickname</label>
                     <input class="form-control <%= is_valids.get("nickname") %>" name='nickname' type='text' value="<%= values.getOrDefault("nickname", "") %>" required>

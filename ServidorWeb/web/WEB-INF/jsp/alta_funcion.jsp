@@ -117,6 +117,7 @@
                 
                 Funcion funcion = new Funcion (nombre, ffecha, fhora_inicio, new java.util.Date(), id_espectaculo);
                 if (Fabrica.getInstance().getInstanceControladorPlataforma().Alta_de_Funcion(funcion, imageFuncion)) {
+                    session.setAttribute("mensaje", "FUNCIÓN CREADA CON ÉXITO");
                     int idfuncion = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idfuncion(nombre);
                     for (String artista : grupo_artistas) {
                      int idartista = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idartista(artista);
@@ -225,7 +226,7 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: mistyrose">
+            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: lemonchiffon">
                 <div class="mb-3">
                     <label class="form-label">Elija un espectaculo</label>
                     <select class="form-select <%= is_valids.get("espectaculo") %>" name="espectaculo" id="espectaculo" required>

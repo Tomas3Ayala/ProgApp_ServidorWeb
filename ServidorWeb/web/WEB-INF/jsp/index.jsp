@@ -20,7 +20,10 @@
 
 <html>
     <head>
-        <%
+        <%  
+            String mensaje = (String)session.getAttribute("mensaje");
+            
+            //mensaje = "USUARIO AGREGADO CON EXITO";
             String buscar = request.getParameter("buscar");
             String plataforma = request.getParameter("plataforma");
             String categoria = request.getParameter("categoria");
@@ -181,13 +184,23 @@
             }
             $(document).ready(function () {
                 cambio_orden(<%= orden_final %>);
+                 if (<%= mensaje != null %>){ 
+                $(".toast").toast("show");
+                }
             })
         </script>
     </head>
 
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
-
+        <div class="toast align-items-center text-white  border-0" aria-live="assertive" aria-atomic="true"  style="position: relative; position: absolute; topcenter: 0;min-height: 70px; background-color: green">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong> <%= mensaje %> </strong>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" ></button>
+            </div>
+        </div>
         <div class="container">
             <br>
             <div class="hstack gap-3">
@@ -257,7 +270,7 @@
                 </h4></center>
             <% } %>
         </div>
-        
+        <% session.setAttribute("mensaje", null); %>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     </body>
 </html>

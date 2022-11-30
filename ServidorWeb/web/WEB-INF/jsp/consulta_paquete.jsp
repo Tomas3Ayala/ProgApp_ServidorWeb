@@ -18,6 +18,7 @@
 <!DOCTYPE html>
 <html>
      <%
+        String mensaje = (String)session.getAttribute("mensaje");
         int id_paqu = Integer.parseInt(request.getParameter("paquete"));
         Paquete paquete = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_info_paquetes(id_paqu);
         ArrayList<Espectaculo> espectaculos = Fabrica.getInstance().getInstanceControladorEspectaculo().obtener_espectaculos_aceptados_de_paquete(id_paqu);
@@ -99,10 +100,24 @@
                     }
                 });
             }
+            $(document).ready(function () {
+               
+                 if (<%= mensaje != null %>){ 
+                $(".toast").toast("show");
+                }
+            })
         </script>
     </head>
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
+         <div class="toast align-items-center text-white  border-0" aria-live="assertive" aria-atomic="true"  style="position: relative; position: absolute; topcenter: 0;min-height: 70px; background-color: green">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong> <%= mensaje %> </strong>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" ></button>
+            </div>
+        </div>
         <div class="container">
            <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %> 
             <center><h1>Paquete <%= paquete.getNombre()%></h1>  <% if (Fabrica.getInstance().getInstanceControllerUsuario().paquete_comprado(((Usuario) session.getAttribute("usuario")).getId(), paquete.getId())) { %>
@@ -118,13 +133,26 @@
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
-                        <p>Nombre: <%= paquete.getNombre() %></p>
-                        <p>Descripcion: <%= paquete.getDescripcion() %></p>
-                        <p>Fecha de inicio: <%= paquete.getFecha_inicio() %></p>
-                        <p>Fecha de fin: <%= paquete.getFecha_fin() %></p>
-                        <p>Descuento: <%= paquete.getDescuento() %></p>
-
-                        <span> <%= categorias_str %> </span>
+                       <!-- <p>Nombre: < paquete.getNombre() %></p> -->
+                       <p><strong>Descripcion: <%= paquete.getDescripcion() %></strong></p>
+                       <p><strong>Fecha de inicio: <%= paquete.getFecha_inicio() %></strong></p>
+                       <p><strong>Fecha de fin: <%= paquete.getFecha_fin() %></strong></p>
+                       <p><strong>Descuento: <%= paquete.getDescuento() %> %</strong></p>
+                       <% if (categorias_a_mostrar.size() > 0) { %>
+                            <span>
+                                <strong>Categorias:</strong>
+                             <% for (String categoria : categorias_a_mostrar) {
+                                if ("Charlas TED".equals(categoria) ){ %>
+                                <span class="badge" style="background-color: green"><%= categoria %></span>
+                                 <% } if ("Standup".equals(categoria) ){ %>
+                                <span class="badge" style="background-color: blue"> <%= categoria %> </span>
+                                <% } if ("Charlas TEO".equals(categoria) ){ %>
+                                <span class="badge" style="background-color: #c26129"> <%= categoria %></span>
+                                 <% } else if ("Toques".equals(categoria) ){ %>
+                                 <span class="badge" style="background-color: black"><%= categoria %></span>
+                                 <% } %>   
+                             <% } %>
+                        <% } %> 
                     </div>
                 </div>
             </div>
@@ -186,6 +214,7 @@
                     </div>
                 </div>
             <% } %>   
+            <% session.setAttribute("mensaje", null); %>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     </body>

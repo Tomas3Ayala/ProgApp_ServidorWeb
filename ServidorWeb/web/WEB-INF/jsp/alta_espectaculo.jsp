@@ -168,6 +168,7 @@
                 }
                 Espectaculo espectaculo = new Espectaculo(plataforma, nombre, descripcion, fduracion, fminimo, fmaximo, link, fcosto, new java.util.Date(), ((Usuario)session.getAttribute("usuario")).getId(), EstadoEspectaculo.INGRESADO);
                 if (Fabrica.getInstance().getInstanceControladorPlataforma().crear_Espectaculo(espectaculo, imageEspectaculo)) {
+                    session.setAttribute("mensaje", "ESPECTACULO CREADO");
                     int idespec = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_idespectaculo(nombre, plataforma);
                     for (String categoria : grupo_categorias) {
                         int idecatego = Fabrica.getInstance().getInstanceControladorPlataforma().obtener_id_categoria(categoria);
@@ -262,7 +263,7 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: beige">
+            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: lemonchiffon">
                 <div class="mb-3">
                     <label class="form-label">Plataforma a través de la cual se ofrecerá el espectaculo</label>
                     <select class="form-select <%= is_valids.get("plataforma") %>" name="plataforma" id="plataforma" required>

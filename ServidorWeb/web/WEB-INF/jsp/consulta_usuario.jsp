@@ -56,6 +56,8 @@
         
         ArrayList<String> seguidores = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios_que_siguen_a(nickname);
         ArrayList<String> seguidos = Fabrica.getInstance().getInstanceControllerUsuario().obtener_nicknames_de_usuarios_a_los_que_sigue(nickname);
+        int cant_seguidos = Fabrica.getInstance().getInstanceControllerUsuario().obtener_cantidad_de_usuarios_a_los_que_sigue(nickname);
+        int cant_seguidores = Fabrica.getInstance().getInstanceControllerUsuario().obtener_cantidad_de_usuarios_que_siguen_a(nickname);
         boolean coma = false;
         String seguidores_text = "";
         for (String seguidor : seguidores) {
@@ -116,36 +118,45 @@
     </head>
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
-        <div class="container">
+    <div class="container">
             <center><h1><%= tipo.equals("artista") ? "Artista":"Espectador" %> <%= usuario.getNickname() %></h1></center>
             <div class="modal-body row">
-                <div class="hstack gap-3">
+                <div class="hstack gap-3" >
                     <figure class="figure">
                         <img src="/ServidorWeb/imagen?nick=<%= usuario.getNickname() %>" class="figure-img img-fluid rounded" width="250">
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
-                        <p><strong> <%= usuario.getNickname() %></strong></p>
+                       <!-- <p><strong> < usuario.getNickname() %></strong></p> -->
                         <p><strong> <%= usuario.getNombre() %></strong></p>
                         <p><strong> <%= usuario.getApellido() %></strong></p>
                         <p><strong> <%= usuario.getCorreo() %></strong></p>
                         <p><strong><%= usuario.getNacimiento() %></strong</p>
 
                         <% if (!seguidores.isEmpty()) { %>
-                            <p>Seguidores: <%= seguidores_text %></p>
+                        <div style="align-items: "><strong>
+                            Seguidores: <span class="badge bg-secondary"><%= cant_seguidores %> </span>
+                          </strong>
+                            <p><%= seguidores_text %></p></div>
                         <% } %>
+                        
                         <% if (!seguidos.isEmpty()) { %>
-                            <p>A los que sigue: <%= seguidos_text %></p>
+                          <strong>
+                            Seguidos: <span class="badge bg-secondary"><%= cant_seguidos %> </span>
+                          </strong>
+                            <p><%= seguidos_text %></p>
                         <% } %>
+                        
                         <% if (session.getAttribute("tipo") != null && !log_nickname.equals(nickname)) { %>
                             <button class="btn btn-primary" id="seguir"><%= Fabrica.getInstance().getInstanceControllerUsuario().esta_siguiendo_a(log_nickname, nickname) ? "No seguir":"Seguir" %></button>
                         <% } %>
                     </div>
-                </div>
+                    </div>
             </div>
-            <div class="row">
+            <br><center>
+            <div class="row" style="width: 50%">
                 <% if (tipo == "artista") { %>
-                    <div class="col">
+                <div class="col" >
                             <h3>
                             <% if (espectaculos.size() == 0) { %>
                             No registró ningún espectaculo
@@ -219,7 +230,7 @@
                     </div>
                 <% } %>
             </div>
-        </div>
+        </div></center>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     </body>
 </html>

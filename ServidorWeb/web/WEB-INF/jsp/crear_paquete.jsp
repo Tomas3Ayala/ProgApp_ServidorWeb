@@ -172,7 +172,7 @@
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
         <div class="container">
-            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: buttonface">
+            <form id="form" class="needs-validation" method='post' novalidate style="width: 60%; margin: 0 auto; background-color: lemonchiffon">
                 <div class="mb-3">
                     <label class="form-label">Nombre</label>
                     <input class="form-control <%= is_valids.get("nombre")%>" name='nombre' type='text' value="<%= values.getOrDefault("nombre", "")%>" required>
