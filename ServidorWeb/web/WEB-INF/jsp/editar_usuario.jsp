@@ -109,7 +109,7 @@
                     errors.put("descripcion", "La descripción es un campo obligatorio");
                     error = true;
                 }
-                if (!link.isEmpty() && !link.matches(Fabrica.WEB_REGEX)) {
+                if (!link.isEmpty() && !link.matches(Sender.WEB_REGEX)) {
                     validez.put("link", false);
                     errors.put("link", "El link del sitio web debe tener un formato valido");
                     error = true;

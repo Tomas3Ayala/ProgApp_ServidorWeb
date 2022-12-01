@@ -30,6 +30,8 @@ public class Sender {
         }
         return null;
     }
+    public static String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+    public static String WEB_REGEX = "^(https?:\\/\\/)?([\\w\\Q$-_+!*'(),%\\E]+\\.)+(\\w{2,63})(:\\d{1,4})?([\\w\\Q/$-_+!*'(),%\\E]+\\.?[\\w])*\\/?$";
     
     public static final Properties properties = getProperties();
     public static final String BASE_URL = properties.getProperty("url");

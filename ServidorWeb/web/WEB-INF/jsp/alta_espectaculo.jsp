@@ -141,7 +141,7 @@
                 errors.put("minimo", "El mínimo tiene que ser menor al máximo");
                 error = true;
             }
-            if (!link.matches(Fabrica.WEB_REGEX)) {
+            if (!link.matches(Sender.WEB_REGEX)) {
                 validez.put("link", false);
                 errors.put("link", "La URL debe tener un formato valido");
                 error = true;
