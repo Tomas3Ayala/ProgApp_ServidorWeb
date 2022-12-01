@@ -31,6 +31,8 @@
         String tipo = "artista";
         Usuario usuario = null;
         Artista artista = ArtistaDto.toArtista(GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_nickname", new Object[] {nickname} ), ArtistaDto.class));
+        
+        
         if (artista == null) {
             Espectador espectador = EspectadorDto.toEspectador(GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), EspectadorDto.class));
             usuario = espectador;
@@ -163,26 +165,48 @@
             <div class="row" style="width: 50%">
                 <% if (tipo == "artista") { %>
                 <div class="col" >
-                            <h3>
-                            <% if (espectaculos.size() == 0) { %>
-                            No registró ningún espectaculo
-                            <% } else { %>
-                            Espectaculos de los que es organizador
-                            <% } %>
-                            </h3>
+                        <h3>
+                        <% if (espectaculos.size() == 0) { %>
+                        No registró ningún espectaculo
+                        <% } else { %>
+                        Espectaculos de los que es organizador
+                        <% } %>
+                        </h3>
 
-                            <ul class="list-group">
-                                <% for (Espectaculo espectaculo : espectaculos) { %>
-                                    <a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">
-                                        <li class="list-group-item">
-                                            <div class="hstack gap-3">
-                                                <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="30">
-                                                <span><%= espectaculo.getNombre() %></span>
-                                            </div>
-                                        </li>
-                                    </a>
-                                <% } %>
-                            </ul>
+                        <ul class="list-group">
+                            <% for (Espectaculo espectaculo : espectaculos) { 
+                            %>
+                                <a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">
+                                    <li class="list-group-item">
+                                        <div class="hstack gap-3">
+                                            <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="30">
+                                            <% System.out.println("que"); %>
+                                            <span><%= espectaculo.getNombre() %></span>
+                                            <% if (((Usuario) session.getAttribute("usuario")).getNickname().equals(nickname)) {
+                                                String estado = espectaculo.getEstado().toString();
+                                                String color = "text-bg-primary";
+                                                switch (espectaculo.getEstado()) {
+                                                    case ACEPTADO:
+                                                        color = "text-bg-success";
+                                                        break;
+                                                    case RECHAZADO:
+                                                        color = "text-bg-danger";
+                                                        break;
+                                                    case INGRESADO:
+                                                        color = "text-bg-warning";
+                                                        break;
+                                                    case FINALIZADO:
+                                                        color = "text-bg-dark";
+                                                        break;
+                                                }
+                                            %>
+                                                <span class="badge rounded-pill <%= color %>"><%= estado %></span>
+                                            <% } %>
+                                        </div>
+                                    </li>
+                                </a>
+                            <% } %>
+                        </ul>
                     </div>
                 <% } %>
                 <% if (tipo == "espectador") { %>

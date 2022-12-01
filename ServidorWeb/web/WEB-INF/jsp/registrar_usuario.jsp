@@ -29,7 +29,7 @@
         HashMap<String, String> values = new HashMap<String, String>();
         HashMap<String, String> errors = new HashMap<String, String>();
         HashMap<String, Boolean> validez = new HashMap<String, Boolean>();
-        if (request.getMethod() == "POST") {
+        if (request.getMethod().equals("POST")) {
             validez.put("nickname", true);
             validez.put("nombre", true);
             validez.put("apellido", true);
@@ -99,7 +99,7 @@
                 errors.put("correo", "Este correo ya esta siendo usado por otro usuario en el sistema");
                 error = true;
             }
-            else if (!correo.matches(Fabrica.EMAIL_REGEX)) {
+            else if (!correo.matches(Sender.EMAIL_REGEX)) {
                 validez.put("correo", false);
                 errors.put("correo", "El correo debe tener un formato valido");
                 error = true;
@@ -145,7 +145,7 @@
                     errors.put("descripcion", "La descripción es un campo obligatorio");
                     error = true;
                 }
-                if (!link.isEmpty() && !link.matches(Fabrica.WEB_REGEX)) {
+                if (!link.isEmpty() && !link.matches(Sender.WEB_REGEX)) {
                     validez.put("link", false);
                     errors.put("link", "El link del sitio web debe tener un formato valido");
                     error = true;
@@ -230,7 +230,7 @@
                     if (image_loaded) { // se fija si esta disponible
                         while (image === null); // espera a la que imagen este cargada
                         formData.set("imagen", image);
-//                        alert("que paso?");
+//                    alert("que paso?");
                     }
                 });
                 

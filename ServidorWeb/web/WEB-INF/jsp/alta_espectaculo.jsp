@@ -28,7 +28,7 @@
         HashMap<String, String> values = new HashMap<String, String>();
         HashMap<String, String> errors = new HashMap<String, String>();
         HashMap<String, Boolean> validez = new HashMap<String, Boolean>();
-        if (request.getMethod() == "POST") {
+        if (request.getMethod().equals("POST")) {
             validez.put("plataforma", true);
             validez.put("nombre", true);
             validez.put("descripcion", true);
@@ -141,7 +141,7 @@
                 errors.put("minimo", "El mínimo tiene que ser menor al máximo");
                 error = true;
             }
-            if (!link.matches(Fabrica.WEB_REGEX)) {
+            if (!link.matches(Sender.WEB_REGEX)) {
                 validez.put("link", false);
                 errors.put("link", "La URL debe tener un formato valido");
                 error = true;
