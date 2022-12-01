@@ -30,7 +30,7 @@
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Función de espectáculo</title>
+        <title>Espectáculo</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript"> </script>
     </head>

@@ -126,7 +126,7 @@
     </head>
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
-    <div class="container">
+        <div class="container">
             <center><h1><%= tipo.equals("artista") ? "Artista":"Espectador" %> <%= usuario.getNickname() %></h1></center>
             <div class="modal-body row">
                 <div class="hstack gap-3" >
@@ -180,9 +180,8 @@
                                     <li class="list-group-item">
                                         <div class="hstack gap-3">
                                             <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="30">
-                                            <% System.out.println("que"); %>
                                             <span><%= espectaculo.getNombre() %></span>
-                                            <% if (((Usuario) session.getAttribute("usuario")).getNickname().equals(nickname)) {
+                                            <% if (session.getAttribute("tipo") != null && ((Usuario) session.getAttribute("usuario")).getNickname().equals(nickname)) {
                                                 String estado = espectaculo.getEstado().toString();
                                                 String color = "text-bg-primary";
                                                 switch (espectaculo.getEstado()) {
@@ -260,7 +259,7 @@
                     </div>
                 <% } %>
             </div>
-        </div></center>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     </body>
 </html>
