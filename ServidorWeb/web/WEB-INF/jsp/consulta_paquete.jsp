@@ -142,17 +142,14 @@
                        <% if (categorias_a_mostrar.size() > 0) { %>
                             <span>
                                 <strong>Categorias:</strong>
-                             <% for (String categoria : categorias_a_mostrar) {
-                                if ("Charlas TED".equals(categoria) ){ %>
-                                <span class="badge" style="background-color: green"><%= categoria %></span>
-                                 <% } if ("Standup".equals(categoria) ){ %>
-                                <span class="badge" style="background-color: blue"> <%= categoria %> </span>
-                                <% } if ("Charlas TEO".equals(categoria) ){ %>
-                                <span class="badge" style="background-color: #c26129"> <%= categoria %></span>
-                                 <% } else if ("Toques".equals(categoria) ){ %>
-                                 <span class="badge" style="background-color: black"><%= categoria %></span>
-                                 <% } %>   
-                             <% } %>
+                           <% for (String categoria : categorias_a_mostrar) {
+                                   int h = categoria.hashCode() % 4;
+                                   String color_para_categoria = "black";
+                                   if (h == 0) {color_para_categoria = "green";}
+                                   else if (h == 1) {color_para_categoria = "blue";}
+                                   else if (h == 2) {color_para_categoria = "#c26129";}
+                           %><span class="badge" style="background-color: <%= color_para_categoria %>"><%= categoria %></span>
+                           <% } %>
                         <% } %> 
                         <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>
                             <% if (!(GsonToUse.gson.fromJson(Sender.post("/users/paquete_comprado", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  paquete.getId()} ), boolean.class))) {%>

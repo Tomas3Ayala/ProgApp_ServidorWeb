@@ -117,23 +117,24 @@
                        <span><strong>Organizador: <%= GsonToUse.gson.fromJson(Sender.post("/users/obtener_artista_de_id", new Object[] {espectaculo.getId_artista()}), ArtistaDto.class).getNickname() %> </strong></span><br>
                        <span><strong>Se transmitirá por: <%= espectaculo.getPlataforma() %> </strong></span><br>
 
-                       <% if (categorias.size() > 0) { %>
-                            <span>
-                                <strong>Categorias:</strong>
-                             <% for (String categoria : categorias) {
-                                 int h = categoria.hashCode() % 0xFFFFFF;
-                                 System.out.println("h " + h);
-                                 String hexColor = String.format("#%06X", (0xFFFFFF & h));
-                                 %>
-                                 <span class="badge" style="background-color: <%= hexColor %>"><%= categoria %></span>
-                             <% } %>
-                        <% } %> 
-                        <br><br>
-                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>
-                            <button class="btn btn-success" id="favorito"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[] {log_nickname, id_espectaculo} ), boolean.class)) ? "Quitar de favorito":"Marcar como favorito" %></button>
-                        <% } else if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista") && ((Usuario)session.getAttribute("usuario")).getId() == espectaculo.getId_artista() && espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO ) { %>
-                            <button class='btn btn-primary' id='finalizar_espectaculo'>Finalizar</button>
-                        <% } %>
+                       <% if (categorias.size() > 0) {%>
+                           <strong>Categorias:</strong>
+                           <% for (String categoria : categorias) {
+                                   int h = categoria.hashCode() % 4;
+                                   String color_para_categoria = "black";
+                                   if (h == 0) {color_para_categoria = "green";}
+                                   else if (h == 1) {color_para_categoria = "blue";}
+                                   else if (h == 2) {color_para_categoria = "#c26129";}
+                           %><span class="badge" style="background-color: <%= color_para_categoria %>"><%= categoria %></span>
+                           <% } %>
+                           <br><br>
+                           <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) {%>
+                           <button class="btn btn-success" id="favorito"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[]{log_nickname, id_espectaculo}), boolean.class)) ? "Quitar de favorito" : "Marcar como favorito"%></button>
+                           <% } else if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista") && ((Usuario) session.getAttribute("usuario")).getId() == espectaculo.getId_artista() && espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO) { %>
+                           <button class='btn btn-primary' id='finalizar_espectaculo'>Finalizar</button>
+                           <% } %>
+                       <% } %>
+                      
                     </div>
                 </div>
             </div>
