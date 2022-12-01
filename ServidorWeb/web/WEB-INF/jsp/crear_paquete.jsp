@@ -111,8 +111,11 @@
                 }
                 
                 Paquete paquete = new Paquete (nombre, descripcion, ifecha, ffecha, pporcentaje);
-                if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/registrar_paquete", new Object[] {PaqueteDto.fromPaquete(paquete),  imagePaquete} ), Boolean.class))){ 
-//                    response.sendRedirect("/ServidorWeb");
+                
+                String chequear = Sender.post("/espectaculos/registrar_paquete", new Object[] {PaqueteDto.fromPaquete(paquete),  imagePaquete} );
+                
+                if ((GsonToUse.gson.fromJson(chequear, boolean.class))){
+                    session.setAttribute("mensaje", "SE CREO EL PAQUETE CON EXITO");
                       %><meta http-equiv="Refresh" content="0; url='/ServidorWeb'" /><%
                 } else {
                     System.out.println("error desconocido al crear el paquete");
