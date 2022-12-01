@@ -127,13 +127,13 @@
                                    else if (h == 2) {color_para_categoria = "#c26129";}
                            %><span class="badge" style="background-color: <%= color_para_categoria %>"><%= categoria %></span>
                            <% } %>
-                           <br><br>
-                           <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) {%>
-                           <button class="btn btn-success" id="favorito"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[]{log_nickname, id_espectaculo}), boolean.class)) ? "Quitar de favorito" : "Marcar como favorito"%></button>
-                           <% } else if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista") && ((Usuario) session.getAttribute("usuario")).getId() == espectaculo.getId_artista() && espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO) { %>
-                           <button class='btn btn-primary' id='finalizar_espectaculo'>Finalizar</button>
-                           <% } %>
                        <% } %>
+                        <br><br>
+                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) {%>
+                        <button class="btn btn-success" id="favorito"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[]{log_nickname, id_espectaculo}), boolean.class)) ? "Quitar de favorito" : "Marcar como favorito"%></button>
+                        <% } else if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista") && ((Usuario) session.getAttribute("usuario")).getId() == espectaculo.getId_artista() && espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO) { %>
+                        <button class='btn btn-primary' id='finalizar_espectaculo'>Finalizar</button>
+                        <% } %>
                       
                     </div>
                 </div>
