@@ -22,8 +22,13 @@
 <html>
     <head>
         <%  
+            
             String mensaje = (String)session.getAttribute("mensaje");
-            String sesion_nickname = ((Usuario)session.getAttribute("usuario")).getNickname();
+            String sesion_nickname = "";
+            if(session.getAttribute("usuario")!=null){
+                sesion_nickname = ((Usuario)session.getAttribute("usuario")).getNickname();
+            } 
+            
             
             //mensaje = "USUARIO AGREGADO CON EXITO";
             String buscar = request.getParameter("buscar");
