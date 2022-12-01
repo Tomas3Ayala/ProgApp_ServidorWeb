@@ -29,7 +29,7 @@
         HashMap<String, String> values = new HashMap<String, String>();
         HashMap<String, String> errors = new HashMap<String, String>();
         HashMap<String, Boolean> validez = new HashMap<String, Boolean>();
-        if (request.getMethod() == "POST") {
+        if (request.getMethod().equals("POST")) {
             validez.put("nickname", true);
             validez.put("nombre", true);
             validez.put("apellido", true);
@@ -230,7 +230,7 @@
                     if (image_loaded) { // se fija si esta disponible
                         while (image === null); // espera a la que imagen este cargada
                         formData.set("imagen", image);
-//                        alert("que paso?");
+//                    alert("que paso?");
                     }
                 });
                 

@@ -22,7 +22,7 @@
         HashMap<String, String> values = new HashMap<String, String>();
         HashMap<String, String> errors = new HashMap<String, String>();
         HashMap<String, Boolean> validez = new HashMap<String, Boolean>();
-        if (request.getMethod() == "POST") {
+        if (request.getMethod().equals("POST")) {
             
             validez.put("nombre", true);
             validez.put("descripcion", true);
