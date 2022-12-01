@@ -136,6 +136,7 @@ public class registro_funcion_espectaculo extends HttpServlet {
             }
 
             Sender.post("/espectaculos/registrar_espectador_en_funcion_de_espectaculo", new Object[] {id_user,  id_func,  costo} );
+            session.setAttribute("mensaje", "SE REGISTRO CON EXITO EN LA FUNCIÓN DE ESPECTACULO");
             response.sendRedirect("/ServidorWeb");
         }
         else

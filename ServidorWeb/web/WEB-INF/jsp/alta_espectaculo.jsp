@@ -159,6 +159,11 @@
                 errors.put("costo", "El costo tiene que ser un número mayor a cero");
                 error = true;
             }
+            if ((GsonToUse.gson.fromJson(Sender.post("/espectaculos/chequear_si_nombre_de_espectaculo_esta_repetido_para_cierta_plataforma", new Object[] {nombre, plataforma}), boolean.class))) {
+                validez.put("nombre", false);
+                errors.put("nombre", "Nombre de espectáculo repetido");
+                error = true;
+            }
 
             if (!error) {
                 byte[] imageEspectaculo = null;

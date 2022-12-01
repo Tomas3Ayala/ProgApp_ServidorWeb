@@ -26,6 +26,12 @@ public class Converter {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
     }
+
+    public static String formatear_date(Date date) {
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date);
+    }
     
     public static ArrayList<Espectaculo> to_Espectaculo_list(ArrayList<String> l) {
         ArrayList<Espectaculo> r = new ArrayList<>();

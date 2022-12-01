@@ -76,7 +76,7 @@ public class agregar_a_paquete extends HttpServlet {
             int id_paqu = Integer.parseInt(request.getParameter("paquete"));
             int id_espec = Integer.parseInt(request.getParameter("espectaculo"));
             ///plataformas/obtener_info_paquetes
-            Sender.post("/plataformas/Agregar_espectaculo_a_paquete", new Object[] {id_espec, GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_info_paquetes", new Object[] {}), PaqueteDto.class).getNombre()});
+            Sender.post("/plataformas/Agregar_espectaculo_a_paquete", new Object[] {id_espec, GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_info_paquetes", new Object[] {id_paqu}), PaqueteDto.class).getNombre()});
             //Fabrica.getInstance().getInstanceControladorPlataforma().obtener_info_paquetes(id_paqu).getNombre()
 //            Fabrica.getInstance().getInstanceControladorPlataforma().Agregar_espectaculo_a_paquete(, );
 

@@ -25,7 +25,8 @@
     <%
         int id_espec = Integer.parseInt(request.getParameter("espectaculo"));
         int id_func = Integer.parseInt(request.getParameter("funcion"));
-        ArrayList<String> paquetes_asociados = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_nombres_de_paquetes_asociados_a_espectaculo", new Object[] {id_espec} ), ArrayList.class));
+        ArrayList<String> paquetes_asociados = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_nombres_de_paquetes_asociados_a_espectaculo_y_comprado_por", new Object[] {id_espec, ((Usuario)session.getAttribute("usuario")).getId()} ), ArrayList.class));
+        
         ArrayList<Registro_funcion> registros = Converter.to_Registro_funcion_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_registros_de_espectador", new Object[] {((Usuario) session.getAttribute("usuario")).getId()} ), ArrayList.class));
         int nregistros = 0;
         for (Registro_funcion registro : registros) {

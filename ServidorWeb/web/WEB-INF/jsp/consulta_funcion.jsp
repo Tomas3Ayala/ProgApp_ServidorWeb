@@ -40,10 +40,10 @@
                     </figure>
                     <div>
                         
-                        <p> <strong>Fecha del espesctaculo: <%= funcion.getFecha() %> </strong></p>
+                        <p> <strong>Fecha de la función <%= Converter.formatear_date(funcion.getFecha()) %> </strong></p>
                         <p> <strong>Hora de inicio: <%= funcion.getHora_inicio() %> hs. </strong></p>
                      <!--   <p>Fecha en la que se registro en el sistema:  funcion.getFecha_registro() %></p> -->
-                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo") == "espectador") {
+                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) {
                             Espectaculo espectaculo = EspectaculoDto.toEspectaculo(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_espectaculo_de_funcion", new Object[] {id_func} ), EspectaculoDto.class));
                         %>
                             <% if (espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO && !(GsonToUse.gson.fromJson(Sender.post("/users/esta_usuario_registrado_a_funcion", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  id_func} ), boolean.class))) { %>

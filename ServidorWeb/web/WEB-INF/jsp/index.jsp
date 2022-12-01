@@ -44,6 +44,10 @@
             } catch (NumberFormatException ex) {
                 numero_pagina = 1;
             }
+
+//            System.out.println("R: " + GsonToUse.gson.fromJson(Sender.post("/espectaculos/get_espectaculos_aceptados", new Object[] {} ), ArrayList.class));
+//            String d = "año";
+//            System.out.println("d: " + d);
             ArrayList<Espectaculo> espectaculos = Converter.to_Espectaculo_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/get_espectaculos_aceptados", new Object[] {} ), ArrayList.class));
             ArrayList<Paquete> paquetes = Converter.to_Paquete_list(GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_paquetes", new Object[] {} ), ArrayList.class));
 

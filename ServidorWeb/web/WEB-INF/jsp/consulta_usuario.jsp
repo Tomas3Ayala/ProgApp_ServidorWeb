@@ -139,12 +139,12 @@
                         <p><strong> <%= usuario.getNombre() %></strong></p>
                         <p><strong> <%= usuario.getApellido() %></strong></p>
                         <p><strong> <%= usuario.getCorreo() %></strong></p>
-                        <p><strong><%= usuario.getNacimiento() %></strong</p>
-
+                        <p><strong><%= Converter.formatear_date(usuario.getNacimiento()) %></strong</p>
+                        <br>
                         <% if (!seguidores.isEmpty()) { %>
                         <div style="align-items: "><strong>
                             Seguidores: <span class="badge bg-secondary"><%= cant_seguidores %> </span>
-                          </strong>
+                            </strong>
                             <p><%= seguidores_text %></p></div>
                         <% } %>
                         

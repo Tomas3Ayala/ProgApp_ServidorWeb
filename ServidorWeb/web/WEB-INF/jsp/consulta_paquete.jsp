@@ -83,31 +83,29 @@
                     }
                 });
             }
-             function comprar_paquete() {
-                $.ajax({
-                    url: "/ServidorWeb/comprar_paquete",
-                    type: "GET",
-                    data: {"paquete" : <%= id_paqu %> },
-                    success: function(data)
-                    {
-                        location.reload();
-                    }
-                });
-                $.ajax({
-                    url: "/ServidorWeb/comprar_paquete",
-                    type: "GET",
-                    data: {"paquete" : <%= id_paqu %> },
-                    success: function(data)
-                    {
-                        location.reload();
-                    }
-                });
+            function comprar_paquete() {
+                for (let i = 0; i < 3; i++) {
+                    $.ajax({
+                        url: "/ServidorWeb/comprar_paquete",
+                        type: "GET",
+                        data: {"paquete" : <%= id_paqu %> },
+                        success: function(data)
+                        {
+                            location.reload();
+                        }
+                    });
+                }
             }
             $(document).ready(function () {
                
                  if (<%= mensaje != null %>){ 
                 $(".toast").toast("show");
                 }
+                
+                $('#agregar_espectaculo').click(() => {
+//                    setTimeout(() => {},3000);
+                    $('#areaAgregarEspectaculo')[0].scrollIntoView();
+                });
             })
         </script>
     </head>
@@ -138,8 +136,8 @@
                     <div>
                        <!-- <p>Nombre: < paquete.getNombre() %></p> -->
                        <p><strong>Descripcion: <%= paquete.getDescripcion() %></strong></p>
-                       <p><strong>Fecha de inicio: <%= paquete.getFecha_inicio() %></strong></p>
-                       <p><strong>Fecha de fin: <%= paquete.getFecha_fin() %></strong></p>
+                       <p><strong>Fecha de inicio: <%= Converter.formatear_date(paquete.getFecha_inicio()) %></strong></p>
+                       <p><strong>Fecha de fin: <%= Converter.formatear_date(paquete.getFecha_fin()) %></strong></p>
                        <p><strong>Descuento: <%= paquete.getDescuento() %> %</strong></p>
                        <% if (categorias_a_mostrar.size() > 0) { %>
                             <span>
@@ -156,6 +154,20 @@
                                  <% } %>   
                              <% } %>
                         <% } %> 
+                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>
+                            <% if (!(GsonToUse.gson.fromJson(Sender.post("/users/paquete_comprado", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  paquete.getId()} ), boolean.class))) {%>
+                            <div class="d-grid gap-2 d-md-flex">
+                                <button class="btn btn-primary" data-bs-toggle="collapse" onclick="comprar_paquete(<%= paquete.getId()%>)">Comprar paquete</button>       
+                            </div>
+                            <% } %>  
+                        <% } %>
+                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista")) { %>
+                            <div class="d-grid gap-2 d-md-flex">
+                                <button id="agregar_espectaculo" type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#areaAgregarEspectaculo" aria-expanded="false" aria-controls="areaAgregarEspectaculo">
+                                    Agregar espectáculo
+                                </button>
+                            </div>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -179,19 +191,7 @@
                 </ul></center>
             <br>
             <br>
-            <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>
-                <% if (!(GsonToUse.gson.fromJson(Sender.post("/users/paquete_comprado", new Object[] {((Usuario) session.getAttribute("usuario")).getId(),  paquete.getId()} ), boolean.class))) {%>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button class="btn btn-primary" data-bs-toggle="collapse" onclick="comprar_paquete(<%= paquete.getId()%>)">Comprar paquete</button>       
-                </div>
-                <% } %>  
-            <% } %> 
             <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista")) { %>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#areaAgregarEspectaculo" aria-expanded="false" aria-controls="areaAgregarEspectaculo">
-                        Agregar espectáculo
-                    </button>
-                </div>
                 <br>
                 <div class="collapse" id="areaAgregarEspectaculo">
                     <div class="card card-body">

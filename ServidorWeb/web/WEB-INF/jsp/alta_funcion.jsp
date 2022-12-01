@@ -1,3 +1,4 @@
+<%@page import="java.text.ParseException"%>
 <%@page import="DTOs.FuncionDto"%>
 <%@page import="Utility.GsonToUse"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -44,9 +45,8 @@
             String horainicio = request.getParameter("hora_inicio");
             String imagen = request.getParameter("imagen");
             SimpleDateFormat formated =new SimpleDateFormat("yyyy-MM-dd");
-            Date ffecha = (Date) formated.parse(fecha);
-            String artistas = request.getParameter("artistas");
-            
+            Date ffecha = null; //(Date) formated.parse(fecha);
+            String artistas = request.getParameter("artistas");            
     
             values.put("nombre", nombre);
             values.put("espectaculo", espectaculo);

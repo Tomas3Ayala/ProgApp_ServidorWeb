@@ -31,7 +31,7 @@
         
         String id_espectaculo = String.valueOf(id_espec);
    
-        String log_nickname = null;
+        String log_nickname = "";
         if (session.getAttribute("usuario") != null)
             log_nickname = ((Usuario)session.getAttribute("usuario")).getNickname();
         
@@ -48,35 +48,48 @@
         <script type="text/javascript">
             
                 $(document).ready(() => {
-                $('#favorito').click(() => {
+                    
+                    $('#finalizar_espectaculo').click(() => {
+                        $.ajax({
+                            url: "/ServidorWeb/finalizar_espectaculo",
+                            type: "GET",
+                            data: {"id_espectaculo" : "<%= id_espectaculo %>" },
+                            success: function(data)
+                            {
+                                location.reload();
+                            }
+                        });
+                    });
 
-                    if ($('#favorito').text() === "Quitar de favorito") {
-                        console.log("carajo");
-                        $.ajax({
-                            url: "/ServidorWeb/favorito",
-                            type: "GET",
-                            data: {"marcar" : "no", "nick" : "<%= log_nickname %>", "id_espectaculo" : "<%= id_espectaculo %>" },
-                            success: function(data)
-                            {
-                                location.reload();
-                            }
-                        });
-                        $('#favorito').text("Marcar como favorito");
-                    }
-                    else {
-                        console.log("que mierda");
-                        $.ajax({
-                            url: "/ServidorWeb/favorito",
-                            type: "GET",
-                            data: {"marcar" : "si", "nick" : "<%= log_nickname %>", "id_espectaculo" : "<%= id_espectaculo %>" },
-                            success: function(data)
-                            {
-                                location.reload();
-                            }
-                        });
-                        $('#favorito').text("Quitar de favorito");
-                    }
-                });
+                    $('#favorito').click(() => {
+
+                        if ($('#favorito').text() === "Quitar de favorito") {
+                            console.log("carajo");
+                            $.ajax({
+                                url: "/ServidorWeb/favorito",
+                                type: "GET",
+                                data: {"marcar" : "no", "nick" : "<%= log_nickname %>", "id_espectaculo" : "<%= id_espectaculo %>" },
+                                success: function(data)
+                                {
+                                    location.reload();
+                                }
+                            });
+                            $('#favorito').text("Marcar como favorito");
+                        }
+                        else {
+                            console.log("que mierda");
+                            $.ajax({
+                                url: "/ServidorWeb/favorito",
+                                type: "GET",
+                                data: {"marcar" : "si", "nick" : "<%= log_nickname %>", "id_espectaculo" : "<%= id_espectaculo %>" },
+                                success: function(data)
+                                {
+                                    location.reload();
+                                }
+                            });
+                            $('#favorito').text("Quitar de favorito");
+                        }
+                    });
             });
         
         </script>
@@ -120,10 +133,11 @@
                              <% } %>
                         <% } %> 
                         <br><br>
-                        <% if (session.getAttribute("tipo").equals("espectador")) { %>
+                        <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>
                             <button class="btn btn-success" id="favorito"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[] {log_nickname, id_espectaculo} ), boolean.class)) ? "Quitar de favorito":"Marcar como favorito" %></button>
+                        <% } else if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("artista") && ((Usuario)session.getAttribute("usuario")).getId() == espectaculo.getId_artista() && espectaculo.getEstado() == EstadoEspectaculo.ACEPTADO ) { %>
+                            <button class='btn btn-primary' id='finalizar_espectaculo'>Finalizar</button>
                         <% } %>
-                    <!--     <span>Estado:  espectaculo.getEstado().toString() %></span><br> -->
                     </div>
                 </div>
             </div>
