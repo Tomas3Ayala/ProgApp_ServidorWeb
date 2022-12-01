@@ -78,7 +78,7 @@
                                 <span><%= usuario.getNombre()%></span>
                                 <span><%= usuario.getApellido()%></span>
                                 <span><%= usuario.getCorreo()%></span> 
-                                <span><%= usuario.getNacimiento() %></span>
+                                <span><%= Converter.formatear_date(usuario.getNacimiento()) %></span>
                             </div>
                         </li>
                     </a>
