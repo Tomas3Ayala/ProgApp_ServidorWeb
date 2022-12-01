@@ -3,6 +3,8 @@
     Created on : 22-oct-2022, 17:50:09
     Author     : Tomas
 --%>
+<%@page import="DTOs.EspectadorDto"%>
+<%@page import="logica.clases.Espectador"%>
 <%@page import="DTOs.ArtistaDto"%>
 <%@page import="DTOs.PaqueteDto"%>
 <%@page import="DTOs.EspectaculoDto"%>
@@ -26,13 +28,58 @@
         ArrayList<String> categorias = (GsonToUse.gson.fromJson(Sender.post("/plataformas/obtener_categorias_espectaculo", new Object[] {id_espec} ), ArrayList.class));
         ArrayList<Funcion> funciones = Converter.to_Funcion_list(GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_funciones_de_espectaculo", new Object[] {id_espec} ), ArrayList.class));
         ArrayList<String> paquetes = (GsonToUse.gson.fromJson(Sender.post("/espectaculos/obtener_nombres_de_paquetes_asociados_a_espectaculo", new Object[] {id_espec} ), ArrayList.class));
-
-    %>
+        
+        String id_espectaculo = String.valueOf(id_espec);
+   
+        String log_nickname = null;
+        if (session.getAttribute("usuario") != null)
+            log_nickname = ((Usuario)session.getAttribute("usuario")).getNickname();
+        
+        String nickname = request.getParameter("usuario");
+        String tipo = "espectador";
+       Usuario usuario = null;
+            Espectador espectador = EspectadorDto.toEspectador(GsonToUse.gson.fromJson(Sender.post("/users/obtener_espectador_de_nickname", new Object[] {nickname} ), EspectadorDto.class));
+            usuario = espectador;
+            tipo = "espectador";    %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Espectáculo</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script type="text/javascript"> </script>
+        <script type="text/javascript">
+            
+                $(document).ready(() => {
+                $('#favorito').click(() => {
+
+                    if ($('#favorito').text() === "Quitar de favorito") {
+                        console.log("carajo");
+                        $.ajax({
+                            url: "/ServidorWeb/favorito",
+                            type: "GET",
+                            data: {"marcar" : "no", "nick" : "<%= log_nickname %>", "id_espectaculo" : "<%= id_espectaculo %>" },
+                            success: function(data)
+                            {
+                                location.reload();
+                            }
+                        });
+                        $('#favorito').text("Marcar como favorito");
+                    }
+                    else {
+                        console.log("que mierda");
+                        $.ajax({
+                            url: "/ServidorWeb/favorito",
+                            type: "GET",
+                            data: {"marcar" : "si", "nick" : "<%= log_nickname %>", "id_espectaculo" : "<%= id_espectaculo %>" },
+                            success: function(data)
+                            {
+                                location.reload();
+                            }
+                        });
+                        $('#favorito').text("Quitar de favorito");
+                    }
+                });
+            });
+        
+        </script>
     </head>
     <body>
         <%@ include file="/WEB-INF/jsp/cabezal.jsp"%>
@@ -72,6 +119,10 @@
                                  <% } %>   
                              <% } %>
                         <% } %> 
+                        <br><br>
+                        <% if (session.getAttribute("tipo").equals("espectador")) { %>
+                            <button class="btn btn-success" id="favorito"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[] {log_nickname, id_espectaculo} ), boolean.class)) ? "Quitar de favorito":"Marcar como favorito" %></button>
+                        <% } %>
                     <!--     <span>Estado:  espectaculo.getEstado().toString() %></span><br> -->
                     </div>
                 </div>

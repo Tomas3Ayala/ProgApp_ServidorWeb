@@ -132,7 +132,7 @@
             <div class="modal-body row">
                 <div class="hstack gap-3">
                     <figure class="figure">
-                        <img src="/ServidorWeb/imagen?paquete=<%= paquete.getNombre() %>" class="figure-img img-fluid rounded" width="300">
+                        <img src="/ServidorWeb/imagen?paquete=<%= paquete.getNombre() %>" class="figure-img img-fluid rounded" width="200">
                         <figcaption class="figure-caption"></figcaption>
                     </figure>
                     <div>
@@ -166,7 +166,7 @@
                 El paquete no tiene espectáculos asociados
                 <% } %>
             </h3>
-            <ul class="list-group">
+            <center><ul class="list-group" style="width: 50%">
                 <% for (Espectaculo espectaculo3 : espectaculos) { %>
                     <li class="list-group-item">
                         <div class="hstack gap-3">
@@ -176,7 +176,7 @@
                         </div>
                     </li>
                 <% } %>
-            </ul>
+                </ul></center>
             <br>
             <br>
             <% if (session.getAttribute("tipo") != null && session.getAttribute("tipo").equals("espectador")) { %>

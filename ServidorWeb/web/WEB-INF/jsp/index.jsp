@@ -22,7 +22,13 @@
 <html>
     <head>
         <%  
+            
             String mensaje = (String)session.getAttribute("mensaje");
+            String sesion_nickname = "";
+            if(session.getAttribute("usuario")!=null){
+                sesion_nickname = ((Usuario)session.getAttribute("usuario")).getNickname();
+            } 
+            
             
             //mensaje = "USUARIO AGREGADO CON EXITO";
             String buscar = request.getParameter("buscar");
@@ -219,7 +225,7 @@
                             <li class="list-group-item">
                                 <div class="hstack gap-3">
                                     <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="130">
-                                    <span><b><%= espectaculo.getNombre() %></b><br><%= espectaculo.getDescripcion() %><br><a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">Leer más...</a></span>
+                                    <span><b><%= espectaculo.getNombre() %></b><br><%= espectaculo.getDescripcion() %><br><b style="color: green"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[] {sesion_nickname, espectaculo.getId()} ), boolean.class)) ? "Favorito" : "No Favorito" %></b><br><a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">Leer más...</a></span>
                                 </div>
                             </li>
                         <% } %>
@@ -229,7 +235,7 @@
                             <li class="list-group-item">
                                 <div class="hstack gap-3">
                                     <img src="/ServidorWeb/imagen?espectaculo=<%= espectaculo.getId()%>" class="figure-img img-fluid rounded" width="130">
-                                    <span><b><%= espectaculo.getNombre() %></b><br><%= espectaculo.getDescripcion() %><br><a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">Leer más...</a></span>
+                                    <span><b><%= espectaculo.getNombre() %></b><br><%= espectaculo.getDescripcion() %><br><b style="color: green"><%= (GsonToUse.gson.fromJson(Sender.post("/users/tiene_favorito_a", new Object[] {sesion_nickname, espectaculo.getId()} ), boolean.class)) ? "Favorito" : "No Favorito" %></b><br><a href="/ServidorWeb/consulta_espectaculo?espectaculo=<%= espectaculo.getId() %>">Leer más...</a></span>
                                 </div>
                             </li>
                         <% } %>
