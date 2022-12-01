@@ -121,15 +121,11 @@
                             <span>
                                 <strong>Categorias:</strong>
                              <% for (String categoria : categorias) {
-                                if ("Charlas TED".equals(categoria) ){ %>
-                                <span class="badge" style="background-color: green"><%= categoria %></span>
-                                 <% } if ("Standup".equals(categoria) ){ %>
-                                <span class="badge" style="background-color: blue"> <%= categoria %> </span>
-                                <% } if ("Charlas TEO".equals(categoria) ){ %>
-                                <span class="badge" style="background-color: #c26129"> <%= categoria %></span>
-                                 <% } else if ("Toques".equals(categoria) ){ %>
-                                 <span class="badge" style="background-color: black"><%= categoria %></span>
-                                 <% } %>   
+                                 int h = categoria.hashCode() % 0xFFFFFF;
+                                 System.out.println("h " + h);
+                                 String hexColor = String.format("#%06X", (0xFFFFFF & h));
+                                 %>
+                                 <span class="badge" style="background-color: <%= hexColor %>"><%= categoria %></span>
                              <% } %>
                         <% } %> 
                         <br><br>
