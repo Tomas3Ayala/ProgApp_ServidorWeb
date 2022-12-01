@@ -16,7 +16,7 @@
             String pass_error = "Este campo es obligatorio";
             //System.out.println("hewow? " + request.getMethod());
             if (request.getMethod().equals("POST")) {
-                //System.out.println("llego?");
+                System.out.println("llego? " + request.getParameter("nickname"));
                 String nickname = request.getParameter("nickname");
                 String pass = request.getParameter("pass");
                 boolean existe_usuario = false;

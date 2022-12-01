@@ -89,6 +89,7 @@ public class Sender {
         for (Object argument : arguments)
             arguments_strings.add(new Gson().toJson(argument));
         os.write((new Gson().toJson(arguments_strings)).getBytes());
+//        System.out.println("gson " + new Gson().toJson(arguments_strings));
 
         os.flush();
         os.close();
@@ -106,7 +107,10 @@ public class Sender {
             }
             in.close();
 
-            return response.toString();
+            String original = response.toString();
+            byte[] utf8Bytes = original.getBytes();
+            String roundTrip = new String(utf8Bytes, "UTF-8");
+            return roundTrip;
         }
         System.out.println("POST Response Code (" + url + ") :: " + responseCode);
         return null;

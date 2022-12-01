@@ -37,6 +37,7 @@ public class consulta_usuario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String usuario = request.getParameter("usuario");
         if (usuario == null)
             response.sendRedirect("/ServidorWeb");

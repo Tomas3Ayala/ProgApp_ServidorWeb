@@ -39,6 +39,7 @@ public class favorito extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         System.out.println(request.getParameter("marcar"));
         String nick = request.getParameter("nick"),id_espectaculo = request.getParameter("id_espectaculo");
         if (nick == null || id_espectaculo == null)

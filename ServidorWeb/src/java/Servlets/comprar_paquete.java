@@ -30,6 +30,7 @@ public class comprar_paquete extends HttpServlet {
     
    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(true);
 
         String paquete = request.getParameter("paquete");

@@ -38,6 +38,7 @@ public class consulta_funcion extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String func = request.getParameter("funcion");
         if (func == null)
             response.sendRedirect("/ServidorWeb");

@@ -30,6 +30,7 @@ public class agregar_a_paquete extends HttpServlet {
 
     public boolean chequear_datos_validos(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(true);
         String paquete = request.getParameter("paquete");
         if (paquete == null)

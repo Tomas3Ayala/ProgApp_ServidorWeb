@@ -37,6 +37,7 @@ public class imagen extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String nick = request.getParameter("nick");
 
         String func = request.getParameter("funcion");

@@ -34,6 +34,7 @@ public class registrar_usuario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         ServletContext context = getServletContext();
         RequestDispatcher dispatcher = context.getRequestDispatcher("/WEB-INF/jsp/registrar_usuario.jsp");
         dispatcher.forward(request, response);

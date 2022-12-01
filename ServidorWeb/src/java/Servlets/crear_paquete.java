@@ -36,6 +36,7 @@ public class crear_paquete extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
       HttpSession session = request.getSession(true);
          if (session.getAttribute("tipo") == null || !session.getAttribute("tipo").equals("artista")) {

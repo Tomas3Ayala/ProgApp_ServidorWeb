@@ -32,6 +32,7 @@ public class cerrar_sesion extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(true);
         session.setAttribute("tipo", null);
         response.sendRedirect("/ServidorWeb");

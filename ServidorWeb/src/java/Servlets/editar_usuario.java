@@ -34,6 +34,7 @@ public class editar_usuario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(true);
         if (session.getAttribute("tipo") == null) {
             response.sendRedirect("/ServidorWeb");

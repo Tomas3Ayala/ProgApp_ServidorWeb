@@ -38,6 +38,7 @@ public class consulta_paquete extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
           String paq = request.getParameter("paquete");
         if (paq == null)
             response.sendRedirect("/ServidorWeb");

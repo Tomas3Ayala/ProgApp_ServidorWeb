@@ -42,6 +42,7 @@ public class consulta_espectaculo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String espec = request.getParameter("espectaculo");
         if (espec == null){
 //            System.out.println("algo 1");

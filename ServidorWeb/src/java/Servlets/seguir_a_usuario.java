@@ -37,6 +37,7 @@ public class seguir_a_usuario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String nick1 = request.getParameter("nick1"), nick2 = request.getParameter("nick2");
         if (nick1 == null || nick2 == null)
             return;

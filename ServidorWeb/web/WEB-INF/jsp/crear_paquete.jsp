@@ -18,6 +18,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <head>
       <%
         HashMap<String, String> values = new HashMap<String, String>();
         HashMap<String, String> errors = new HashMap<String, String>();
@@ -38,8 +39,8 @@
             String porcentaje = request.getParameter("porcentaje");
             String imagen = request.getParameter("imagen");
             SimpleDateFormat formated =new SimpleDateFormat("yyyy-MM-dd");
-            Date ifecha = (Date) formated.parse(fecha_inicio);
-            Date ffecha = (Date) formated.parse(fecha_fin);
+            Date ifecha = null;// (Date) formated.parse(fecha_inicio);
+            Date ffecha = null;//(Date) formated.parse(fecha_fin);
                
             values.put("nombre", nombre);
             values.put("descripcion", descripcion);
@@ -125,8 +126,8 @@
             is_valids.put(set.getKey(), set.getValue() ? "is-valid":"is-invalid");
         }
     %>
-    <head>
-         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Alta de Paquete</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript">

@@ -38,6 +38,7 @@ public class finalizar_espectaculo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(true);
         if (session.getAttribute("tipo") == null || !session.getAttribute("tipo").equals("artista")) // chequea que el usuario que inicio sesion sea un artista
             return;
